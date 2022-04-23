@@ -77,7 +77,7 @@ public class AddWordActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.translate_btn).setOnClickListener(view -> {
-            if(selectedToLanguage.equals("To1") || selectedFromLanguage.equals("From"))
+            if(selectedToLanguage.equals("To") || selectedFromLanguage.equals("From"))
                 Toast.makeText(this,"Select a language",Toast.LENGTH_SHORT).show();
             else if(selectedToLanguage.equals(selectedFromLanguage))
                 Toast.makeText(this,"Select a different language",Toast.LENGTH_SHORT).show();
