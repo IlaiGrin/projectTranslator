@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/screen">
+
+    <LinearLayout
+        android:id="@+id/language_select_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/language_select_background"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:elevation="5dp"
+        android:weightSum="3">
+
+        <Spinner
+            android:id="@+id/select_from_language_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/switch_languages_img"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:src="@drawable/exchange_arrows"
+            android:layout_gravity="center"
+            android:layout_weight="1"/>
+
+        <Spinner
+            android:id="@+id/select_to_language_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/source_editTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="word to translate"
+        android:textSize="30dp"
+        android:elegantTextHeight="true"
+        android:inputType="text" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/display_txt"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:text="@string/display_translation_preview"
+            android:textColor="@color/black"
+            android:textSize="25dp" />
+
+        <ImageView
+            android:id="@+id/add_translation_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/green_btn"
+            android:src="@drawable/plus_img"
+            android:scaleType="centerCrop"
+            android:layout_below="@+id/display_txt"
+            android:visibility="gone"/>
+
+        <EditText
+            android:id="@+id/additional_translation_edit_txt"
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/display_txt"
+            android:hint="Enter a translation"
+            android:inputType="text"
+            android:textSize="25dp"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/save_btn1"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="100dp"
+            android:layout_toRightOf="@+id/display_txt"
+            android:backgroundTint="@color/purple_200"
+            android:text="save" />
+
+        <Button
+            android:id="@+id/save_btn2"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_below="@+id/display_txt"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/display_txt"
+            android:backgroundTint="@color/purple_200"
+            android:text="save"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+
+
+    <Button
+        android:id="@+id/translate_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="translate"
+        android:textSize="30dp"
+        android:layout_gravity="center" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:orientation="horizontal"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/mic_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/mic_icon"
+        android:elevation="10dp"
+        android:background="@drawable/language_select_background" />
+
+    <ImageView
+        android:id="@+id/camera_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/camera_icon"
+        android:background="@drawable/language_select_background"
+        android:elevation="10dp"
+        android:layout_marginLeft="5dp"/>
+
+</LinearLayout>
+
+    <ImageView
+        android:id="@+id/backward_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/blue_btn"
+        android:src="@drawable/backward_arrow"
+        android:layout_gravity="bottom"/>
+
+</LinearLayout>

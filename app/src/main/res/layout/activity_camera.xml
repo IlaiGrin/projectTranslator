@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CameraActivity">
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/backward_img"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/blue_btn"
+            android:src="@drawable/backward_arrow"
+            tools:ignore="MissingConstraints" />
+
+        <ImageButton
+            android:id="@+id/take_photo_img"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/language_select_background"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/display_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="hello"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:layout_marginLeft="60dp"
+            tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
