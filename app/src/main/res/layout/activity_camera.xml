@@ -24,13 +24,13 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/language_select_background"
+            app:layout_constraintTop_toBottomOf="@+id/backward_img"
             tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/display_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="hello"
             android:textSize="20dp"
             android:textColor="@color/black"
             android:layout_marginLeft="60dp"
