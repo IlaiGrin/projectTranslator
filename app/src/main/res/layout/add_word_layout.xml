@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/screen">
 
@@ -38,15 +39,23 @@
             android:layout_weight="1" />
 
     </LinearLayout>
+<com.google.android.material.textfield.TextInputLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="word to translate"
+    app:endIconMode="clear_text"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
     <EditText
         android:id="@+id/source_editTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="word to translate"
-        android:textSize="30dp"
         android:elegantTextHeight="true"
-        android:inputType="text" />
+        android:inputType="text"
+        android:textSize="30dp" />
+
+</com.google.android.material.textfield.TextInputLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"

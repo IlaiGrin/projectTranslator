@@ -9,7 +9,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
-Dialog addWordDialog;
+Dialog logInDialog;
 ImageView plusBtn;
 
     @Override
@@ -22,14 +22,18 @@ ImageView plusBtn;
         plusBtn = findViewById(R.id.plus_btn);
         Intent addIntent = new Intent(this, AddWordActivity.class);
         plusBtn.setOnClickListener(view -> startActivity(addIntent));
+
+        findViewById(R.id.log_in_btn).setOnClickListener(view -> {
+            signInDialog();
+        });
     }
 
-    private void createDialog(){
-        addWordDialog = new Dialog(this);
-        addWordDialog.setContentView(R.layout.add_word_layout);
-        addWordDialog.getWindow().setLayout(Functions.getScreenSize(this).getWidth(), Functions.getScreenSize(this).getWidth());
-        addWordDialog.setCancelable(true);
+    private void signInDialog(){
+        logInDialog = new Dialog(this);
+        logInDialog.setContentView(R.layout.login_layout);
+        logInDialog.getWindow().setLayout(Functions.getScreenSize(this).getWidth(), Functions.getScreenSize(this).getWidth() + Functions.dpToPx(80, this));
+        logInDialog.setCancelable(true);
 
-        addWordDialog.show();
+        logInDialog.show();
     }
 }

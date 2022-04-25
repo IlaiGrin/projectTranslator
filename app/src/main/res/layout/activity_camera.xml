@@ -19,13 +19,18 @@
             android:src="@drawable/backward_arrow"
             tools:ignore="MissingConstraints" />
 
-        <ImageButton
-            android:id="@+id/take_photo_img"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/language_select_background"
-            app:layout_constraintTop_toBottomOf="@+id/backward_img"
-            tools:ignore="MissingConstraints" />
+    <ImageButton
+        android:id="@+id/take_photo_img"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="500dp"
+        android:layout_marginEnd="150dp"
+        android:background="@drawable/language_select_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/display_txt"
