@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/backward_img"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:background="@drawable/blue_btn"
             android:src="@drawable/backward_arrow"
             tools:ignore="MissingConstraints" />
@@ -26,7 +26,7 @@
         android:layout_marginStart="150dp"
         android:layout_marginTop="500dp"
         android:layout_marginEnd="150dp"
-        android:background="@drawable/language_select_background"
+        android:background="@drawable/round_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

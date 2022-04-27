@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:text="Translator"
         android:textColor="@color/black"
-        android:textSize="40dp"
+        android:textSize="50dp"
         android:textStyle="bold|italic" />
 
     <Button
@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="practice"
-            android:textSize="25dp"
+            android:textSize="30dp"
             android:textColor="@color/black"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="vocabulary"
-            android:textSize="25dp"
+            android:textSize="30dp"
             android:textColor="@color/black"
             android:layout_gravity="center"
             android:background="@drawable/btns_background"
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="log in"
-            android:textSize="25dp"
+            android:textSize="30dp"
             android:textColor="@color/black"
             android:layout_gravity="center"
             android:background="@drawable/btns_background"
@@ -57,10 +57,12 @@
 
         <ImageView
             android:id="@+id/plus_btn"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:background="@drawable/green_btn"
             android:src="@drawable/plus_img"
-            android:scaleType="centerCrop"/>
+            android:elevation="15dp"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="20dp"/>
 
 </LinearLayout>

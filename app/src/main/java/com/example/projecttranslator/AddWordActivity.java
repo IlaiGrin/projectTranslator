@@ -18,10 +18,12 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.util.Log;
@@ -56,6 +58,7 @@ public class AddWordActivity extends AppCompatActivity {
     Button saveBtn2;
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
+    NetworkChangeReceiver networkReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,9 @@ public class AddWordActivity extends AppCompatActivity {
         additionalTranslation = findViewById(R.id.additional_translation_edit_txt);
         saveBtn2 = findViewById(R.id.save_btn2);
         translator = new WordTranslator(this, input, findViewById(R.id.display_txt));
+        //follow network state - mic is unavailable without connection
+        networkReceiver = new NetworkChangeReceiver(findViewById(R.id.mic_img));
+        registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         findViewById(R.id.backward_img).setOnClickListener(view -> {
             Intent mainIntent = new Intent(this, MainActivity.class);
@@ -103,20 +109,25 @@ public class AddWordActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.mic_img).setOnClickListener(view -> {
-            if(selectedFromLanguage.equals(""))
-                Toast.makeText(this,"Select from language",Toast.LENGTH_SHORT).show();
+            if(view.getTag().equals(R.drawable.red_btn))
+                Toast.makeText(this,"No Internet connection",Toast.LENGTH_SHORT).show();
             else {
-                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, getLanguageCode(selectedFromLanguage));
-                intent.putExtra(RecognizerIntent.EXTRA_PROMPT,"Say something to translate");
-                try {
-                    startActivityForResult(intent, MICROPHONE_CODE);
-                }catch (Exception e){
-                    e.printStackTrace();
-                    Toast.makeText(AddWordActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                if(selectedFromLanguage.equals(""))
+                    Toast.makeText(this,"Select from language",Toast.LENGTH_SHORT).show();
+                else {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, getLanguageCode(selectedFromLanguage));
+                    intent.putExtra(RecognizerIntent.EXTRA_PROMPT,"Say something to translate");
+                    try {
+                        startActivityForResult(intent, MICROPHONE_CODE);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        Toast.makeText(AddWordActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
+
         });
 
         findViewById(R.id.camera_img).setOnClickListener(view -> {
@@ -137,6 +148,12 @@ public class AddWordActivity extends AppCompatActivity {
                 selectedToLanguage = tempFromLanguage;
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(networkReceiver);
     }
 
     private String getLanguageCode(String language) {
@@ -193,9 +210,4 @@ public class AddWordActivity extends AppCompatActivity {
         fromSpinner.setAdapter(fromAdaptor);
         fromSpinner.setSelection(toAdaptor.getPosition(fromLanguage));
     }
-    /*for (int i = 0; i<fromLanguages.length;i++) {
-            TextView languageView = new TextView(this);
-            fromAdaptor.getView(i,languageView,fromSpinner);
-            languageView.setOnClickListener(view->selectedFromLanguage = ((TextView)view).getText().toString());
-        }*/
 }

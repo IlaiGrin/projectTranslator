@@ -31,7 +31,7 @@ ImageView plusBtn;
     private void signInDialog(){
         logInDialog = new Dialog(this);
         logInDialog.setContentView(R.layout.login_layout);
-        logInDialog.getWindow().setLayout(Functions.getScreenSize(this).getWidth(), Functions.getScreenSize(this).getWidth() + Functions.dpToPx(80, this));
+        logInDialog.getWindow().setLayout(Functions.getScreenSize(this).getWidth(), Functions.getScreenSize(this).getWidth() + Functions.dpToPx(65, this));
         logInDialog.setCancelable(true);
 
         logInDialog.show();
