@@ -2,9 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.projecttranslator">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature android:name="android.hardware.camera.any" /><!-- it can be a front camera or a back camera -->
+
+    <uses-feature android:name="android.hardware.camera.any" /> <!-- it can be a front camera or a back camera -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -18,12 +19,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectTranslator">
         <activity
+            android:name=".LogInActivity"
+            android:exported="false" />
+        <activity
             android:name=".CameraActivity"
             android:exported="false" />
         <activity
             android:name=".AddWordActivity"
-            android:exported="false" />
-        <!-- automatically download the ML model -->
+            android:exported="false" /> <!-- automatically download the ML model -->
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="ocr" />
@@ -33,11 +36,13 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <receiver android:name=".NetworkChangeReceiver"
+        <receiver
+            android:name=".NetworkChangeReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />

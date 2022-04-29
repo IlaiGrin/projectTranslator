@@ -1,49 +1,27 @@
 package com.example.projecttranslator;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.camera.core.Camera;
-import androidx.camera.core.CameraSelector;
-import androidx.camera.core.ImageCapture;
-import androidx.camera.core.Preview;
-import androidx.camera.lifecycle.ProcessCameraProvider;
-import androidx.camera.view.PreviewView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleOwner;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.nl.translate.TranslateLanguage;
 
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 public class AddWordActivity extends AppCompatActivity {
 
@@ -63,15 +41,18 @@ public class AddWordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_word_layout);
+        setContentView(R.layout.activity_add_word);
 
         sharedPref = getSharedPreferences(getResources().getString(R.string.shared_preference_name),MODE_PRIVATE);
         editor = sharedPref.edit();
-        initializeSpinners(sharedPref.getString("from_language","From"),sharedPref.getString("to_language","To"));       //select languages spinners
+        //select languages spinners
+        initializeSpinners(sharedPref.getString("from_language","From"),sharedPref.getString("to_language","To"));
+        //initialize members
         input = findViewById(R.id.source_editTxt);
         additionalTranslation = findViewById(R.id.additional_translation_edit_txt);
         saveBtn2 = findViewById(R.id.save_btn2);
-        translator = new WordTranslator(this, input, findViewById(R.id.display_txt));
+        translator = new WordTranslator(this, input, findViewById(R.id.display_txt),
+                findViewById(R.id.progress_bar), findViewById(R.id.add_word_screen));
         //follow network state - mic is unavailable without connection
         networkReceiver = new NetworkChangeReceiver(findViewById(R.id.mic_img));
         registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
@@ -99,8 +80,10 @@ public class AddWordActivity extends AppCompatActivity {
                     additionalTranslation.setVisibility(View.VISIBLE);
                     saveBtn2.setVisibility(View.VISIBLE);
                     saveBtn2.setOnClickListener(save2 ->{
-                        if(additionalTranslation.getText().equals(""))
-                            Toast.makeText(this,"enter a translation",Toast.LENGTH_SHORT).show();
+                        if(additionalTranslation.getText().equals("")) {
+                            additionalTranslation.setError("Enter a translation");
+                            additionalTranslation.requestFocus();
+                        }
                     });
                 });
             }
@@ -144,6 +127,8 @@ public class AddWordActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     @Override
     protected void onDestroy() {
