@@ -74,7 +74,6 @@ public class CameraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-        getSupportActionBar().hide();
 
         previewView = findViewById(R.id.previewView);
         display = findViewById(R.id.display_txt);
@@ -107,10 +106,7 @@ public class CameraActivity extends AppCompatActivity {
             cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, useCaseGroup);
             });
 
-        findViewById(R.id.backward_img).setOnClickListener(view -> {
-            Intent intentBack = new Intent(this, AddWordActivity.class);
-            startActivity(intentBack);
-        });
+        findViewById(R.id.backward_img).setOnClickListener(view -> startActivity(new Intent(this, AddWordActivity.class)));
     }
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override

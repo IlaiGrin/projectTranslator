@@ -64,7 +64,6 @@ public class AddWordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_word_layout);
-        getSupportActionBar().hide();
 
         sharedPref = getSharedPreferences(getResources().getString(R.string.shared_preference_name),MODE_PRIVATE);
         editor = sharedPref.edit();
@@ -77,18 +76,17 @@ public class AddWordActivity extends AppCompatActivity {
         networkReceiver = new NetworkChangeReceiver(findViewById(R.id.mic_img));
         registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
-        findViewById(R.id.backward_img).setOnClickListener(view -> {
-            Intent mainIntent = new Intent(this, MainActivity.class);
-            startActivity(mainIntent);
-        });
+        findViewById(R.id.backward_img).setOnClickListener(view -> startActivity(new Intent(this, MainActivity.class)));
 
         findViewById(R.id.translate_btn).setOnClickListener(view -> {
             if(selectedToLanguage.equals("To") || selectedFromLanguage.equals("From"))
                 Toast.makeText(this,"Select a language",Toast.LENGTH_SHORT).show();
             else if(selectedToLanguage.equals(selectedFromLanguage))
                 Toast.makeText(this,"Select a different language",Toast.LENGTH_SHORT).show();
-            else if(input.getText().toString().equals(""))
-                Toast.makeText(this, "enter a word", Toast.LENGTH_SHORT).show();
+            else if(input.getText().toString().equals("")) {
+                input.setError("Enter a word");
+                input.requestFocus();
+            }
             else {
                 additionalTranslation.setVisibility(View.GONE);
                 saveBtn2.setVisibility(View.GONE);
@@ -130,10 +128,7 @@ public class AddWordActivity extends AppCompatActivity {
 
         });
 
-        findViewById(R.id.camera_img).setOnClickListener(view -> {
-            Intent cameraIntent = new Intent(this, CameraActivity.class);
-            startActivity(cameraIntent);
-        });
+        findViewById(R.id.camera_img).setOnClickListener(view -> startActivity(new Intent(this, CameraActivity.class)));
 
         findViewById(R.id.switch_languages_img).setOnClickListener(view -> {
             if(selectedToLanguage.equals("To") || selectedFromLanguage.equals("From"))

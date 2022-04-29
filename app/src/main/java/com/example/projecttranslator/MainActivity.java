@@ -17,11 +17,9 @@ ImageView plusBtn;
         super.onCreate(savedInstanceState);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().hide();
 
         plusBtn = findViewById(R.id.plus_btn);
-        Intent addIntent = new Intent(this, AddWordActivity.class);
-        plusBtn.setOnClickListener(view -> startActivity(addIntent));
+        plusBtn.setOnClickListener(view -> startActivity(new Intent(this, AddWordActivity.class)));
 
         findViewById(R.id.log_in_btn).setOnClickListener(view -> {
             signInDialog();
