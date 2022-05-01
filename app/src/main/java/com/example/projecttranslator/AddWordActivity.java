@@ -33,7 +33,7 @@ public class AddWordActivity extends AppCompatActivity {
     ArrayAdapter toAdaptor, fromAdaptor;
     WordTranslator translator;
     EditText input, additionalTranslation;
-    Button saveBtn2;
+    Button saveBtn1, saveBtn2;
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
     NetworkChangeReceiver networkReceiver;
@@ -51,6 +51,7 @@ public class AddWordActivity extends AppCompatActivity {
         input = findViewById(R.id.source_editTxt);
         additionalTranslation = findViewById(R.id.additional_translation_edit_txt);
         saveBtn2 = findViewById(R.id.save_btn2);
+        saveBtn1 = findViewById(R.id.save_btn1);
         translator = new WordTranslator(this, input, findViewById(R.id.display_txt),
                 findViewById(R.id.progress_bar), findViewById(R.id.add_word_screen));
         //follow network state - mic is unavailable without connection
@@ -67,11 +68,11 @@ public class AddWordActivity extends AppCompatActivity {
             else if(input.getText().toString().equals("")) {
                 input.setError("Enter a word");
                 input.requestFocus();
-            }
-            else {
+            } else {
                 additionalTranslation.setVisibility(View.GONE);
                 saveBtn2.setVisibility(View.GONE);
                 translator.translate(getLanguageCode(selectedToLanguage), getLanguageCode(selectedFromLanguage));
+                saveBtn1.setVisibility(View.VISIBLE);
                 //option of another translation
                 ImageView plusBtn = findViewById(R.id.add_translation_btn);
                 plusBtn.setVisibility(View.VISIBLE);

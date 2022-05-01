@@ -8,11 +8,17 @@ import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 Dialog logInDialog;
 ImageView plusBtn;
 Button logInBtn;
+FirebaseAuth firebaseAuth;
+FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +26,23 @@ Button logInBtn;
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
+        logInBtn = findViewById(R.id.log_in_btn);
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+
+        if(user != null)
+            logInBtn.setText("Log out");
+
         findViewById(R.id.plus_btn).setOnClickListener(view -> startActivity(new Intent(this, AddWordActivity.class)));
 
-        logInBtn = findViewById(R.id.log_in_btn);
-        logInBtn.setOnClickListener(view -> startActivity(new Intent(this, LogInActivity.class)));
+        logInBtn.setOnClickListener(view -> {
+            if(user != null) {
+                firebaseAuth.signOut();
+                user = null;
+                logInBtn.setText("Log in");
+            } else
+                startActivity(new Intent(this, LogInActivity.class));
+        });
     }
 
     /*private void signInDialog(){
