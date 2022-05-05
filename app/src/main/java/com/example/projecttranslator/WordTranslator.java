@@ -16,15 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseExceptionMapper;
 import com.google.mlkit.common.model.DownloadConditions;
-import com.google.mlkit.nl.languageid.LanguageIdentification;
-import com.google.mlkit.nl.languageid.LanguageIdentifier;
-import com.google.mlkit.nl.translate.TranslateLanguage;
 import com.google.mlkit.nl.translate.Translation;
 import com.google.mlkit.nl.translate.TranslatorOptions;
 import com.google.mlkit.nl.translate.Translator;
@@ -44,7 +36,7 @@ public class WordTranslator {
         this.downloadModelBar = downloadModelBar;
         this.layout = layout;
     }
-    public void translate(String toLanguageCode, String fromLanguageCode){
+    public void translate(String fromLanguageCode, String toLanguageCode){
         setProgressBar(true);
         // creating firebase translate option
         TranslatorOptions options = new TranslatorOptions.Builder()

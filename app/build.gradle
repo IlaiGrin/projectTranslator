@@ -36,8 +36,10 @@ dependencies {
     //translate dependencies
     implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.0'
     implementation 'com.google.mlkit:translate:17.0.0'
-    implementation 'com.google.mlkit:language-id:17.0.3'
-    implementation 'com.google.android.gms:play-services-mlkit-language-id:17.0.0-beta1'
+    implementation 'com.google.firebase:firebase-ml-natural-language:22.0.0'
+    implementation 'com.google.firebase:firebase-ml-natural-language-language-id-model:20.0.7'
+    //implementation 'com.google.mlkit:language-id:17.0.3'
+    //implementation 'com.google.android.gms:play-services-mlkit-language-id:17.0.0-beta1'
 
     //camera dependencies
     implementation "androidx.camera:camera-core:1.1.0-beta03"
