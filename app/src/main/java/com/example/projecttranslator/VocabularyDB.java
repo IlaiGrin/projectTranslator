@@ -30,7 +30,7 @@ public class VocabularyDB {
                 ArrayList<String> translations = new ArrayList<String>();
                 translations.add(translation);
                 dataBase.put(sourceWord, translations);
-            } else if(!dataBase.get(sourceWord).contains(translation))      //if translation exist in DB
+            } else if(!dataBase.get(sourceWord).contains(translation))      //if translation doesn't exist in DB
                 dataBase.get(sourceWord).add(translation);  //add the translation
             else
                 Toast.makeText(context,"translation already exists",Toast.LENGTH_SHORT).show();

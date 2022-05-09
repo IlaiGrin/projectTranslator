@@ -19,13 +19,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectTranslator">
         <activity
+            android:name=".SignUpActivity"
+            android:exported="false" />
+        <activity
             android:name=".LogInActivity"
             android:exported="false" />
         <activity
             android:name=".CameraActivity"
             android:exported="false" />
         <activity
-            android:name=".AddWordActivity"
+            android:name=".AddWordFragment"
             android:exported="false" /> <!-- automatically download the ML model -->
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"

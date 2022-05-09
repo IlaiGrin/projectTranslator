@@ -5,13 +5,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
-import androidx.camera.core.ImageCapture;
-import androidx.camera.core.ImageCaptureException;
-import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.core.UseCaseGroup;
 import androidx.camera.core.ViewPort;
-import androidx.camera.core.impl.CaptureConfig;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
@@ -24,14 +20,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Rational;
 import android.util.Size;
@@ -39,19 +31,12 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.mlkit.nl.translate.TranslateLanguage;
-import com.google.mlkit.nl.translate.TranslatorOptions;
 import com.google.mlkit.vision.common.InputImage;
-import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
-import com.google.mlkit.vision.text.TextRecognizerOptionsInterface;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
-import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.concurrent.ExecutionException;
 
@@ -106,7 +91,7 @@ public class CameraActivity extends AppCompatActivity {
             cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, useCaseGroup);
             });
 
-        findViewById(R.id.backward_img).setOnClickListener(view -> startActivity(new Intent(this, AddWordActivity.class)));
+        findViewById(R.id.backward_img).setOnClickListener(view -> startActivity(new Intent(this, AddWordFragment.class)));
     }
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override

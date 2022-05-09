@@ -61,7 +61,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="20dp">
 
         <TextView
             android:id="@+id/display_txt"
@@ -138,13 +138,13 @@
         android:textSize="35dp"
         android:layout_gravity="center"
         android:backgroundTint="@color/teal_700"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="30dp"/>
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="85dp"
     android:orientation="horizontal"
     android:gravity="center"
-    android:layout_marginTop="10dp">
+    android:layout_marginTop="20dp">
 
     <ImageView
         android:id="@+id/mic_img"
@@ -164,16 +164,6 @@
         android:layout_marginLeft="5dp" />
 
 </LinearLayout>
-
-    <ImageView
-        android:id="@+id/backward_img"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:background="@drawable/blue_btn"
-        android:src="@drawable/backward_arrow"
-        android:layout_gravity="bottom"
-        android:elevation="10dp"
-        android:layout_marginTop="10dp"/>
 
     <ProgressBar
         android:id="@+id/progress_bar"

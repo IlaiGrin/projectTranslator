@@ -1,6 +1,7 @@
 package com.example.projecttranslator;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -8,8 +9,8 @@ import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -26,31 +27,31 @@ FirebaseUser user;
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-        logInBtn = findViewById(R.id.log_in_btn);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new ProfileFragment()).commit();     //start with profile fragment
+        BottomNavigationView navigationView = findViewById(R.id.bottomNavBar);
+        navigationView.setOnNavigationItemSelectedListener(navListener);
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
 
-        if(user != null)
-            logInBtn.setText("Log out");
-
-        findViewById(R.id.plus_btn).setOnClickListener(view -> startActivity(new Intent(this, AddWordActivity.class)));
-
-        logInBtn.setOnClickListener(view -> {
-            if(user != null) {
-                firebaseAuth.signOut();
-                user = null;
-                logInBtn.setText("Log in");
-            } else
-                startActivity(new Intent(this, LogInActivity.class));
-        });
+        if(user == null)
+            startActivity(new Intent(this, LogInActivity.class));
     }
 
-    /*private void signInDialog(){
-        logInDialog = new Dialog(this);
-        logInDialog.setContentView(R.layout.activity_login);
-        logInDialog.getWindow().setLayout(Functions.getScreenSize(this).getWidth(), Functions.getScreenSize(this).getWidth() + Functions.dpToPx(65, this));
-        logInDialog.setCancelable(true);
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener = item -> {
+        Fragment selectedFragment = null;
 
-        logInDialog.show();
-    }*/
+        switch (item.getItemId()){
+            case R.id.profile:
+                selectedFragment = new ProfileFragment();
+                break;
+            case R.id.translator:
+                selectedFragment = new AddWordFragment();
+                break;
+            case R.id.vocabulary:
+                selectedFragment = new VocabularyFragment();
+                break;
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, selectedFragment).commit();  //replacing the fragment
+        return true;
+    };
 }

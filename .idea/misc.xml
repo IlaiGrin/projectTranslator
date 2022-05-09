@@ -9,6 +9,8 @@
         <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/drawable/btns_background.xml" value="0.1535" />
         <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/drawable/green_btn.xml" value="0.22135416666666666" />
         <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/drawable/ic_account_circle.xml" value="0.206" />
+        <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/drawable/ic_list.xml" value="0.145" />
+        <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/drawable/ic_translator.xml" value="0.145" />
         <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/drawable/language_select_background.xml" value="0.3769230769230769" />
         <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/drawable/plus_btn.xml" value="0.35" />
         <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/drawable/red_btn.xml" value="0.2824074074074074" />
@@ -17,10 +19,15 @@
         <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/layout/activity_add_word.xml" value="0.20677083333333332" />
         <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/layout/activity_camera.xml" value="0.25" />
         <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/layout/activity_login.xml" value="0.25" />
-        <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/layout/activity_sign_up.xml" value="0.36666666666666664" />
+        <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/layout/add_word_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/layout/add_word_layout.xml" value="0.33" />
         <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/layout/login_layout.xml" value="0.36666666666666664" />
+        <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/layout/profile_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/layout/spinner_item.xml" value="0.15" />
+        <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/layout/vocabulary_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/programing/androidStudioProjects/projectTranslator/app/src/main/res/menu/menu.xml" value="0.13489583333333333" />
       </map>
     </option>
   </component>
