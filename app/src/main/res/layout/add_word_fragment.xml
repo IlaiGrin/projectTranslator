@@ -39,6 +39,7 @@
             android:layout_weight="1" />
 
     </LinearLayout>
+
 <com.google.android.material.textfield.TextInputLayout
     android:layout_marginTop="20dp"
     android:layout_width="match_parent"

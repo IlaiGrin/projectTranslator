@@ -18,8 +18,6 @@ public class MainActivity extends AppCompatActivity {
 Dialog logInDialog;
 ImageView plusBtn;
 Button logInBtn;
-FirebaseAuth firebaseAuth;
-FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +25,16 @@ FirebaseUser user;
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
+
+
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new ProfileFragment()).commit();     //start with profile fragment
         BottomNavigationView navigationView = findViewById(R.id.bottomNavBar);
         navigationView.setOnNavigationItemSelectedListener(navListener);
-        firebaseAuth = FirebaseAuth.getInstance();
-        user = firebaseAuth.getCurrentUser();
 
-        if(user == null)
+        if(getIntent() != null && getIntent().getBooleanExtra("open_translator", false))    //when returning from camera
+            navigationView.findViewById(R.id.translator).callOnClick();
+
+        if(!Utils.user.isLoggedIn())
             startActivity(new Intent(this, LogInActivity.class));
     }
 

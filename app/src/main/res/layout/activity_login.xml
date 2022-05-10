@@ -30,7 +30,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:elegantTextHeight="true"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:layout_gravity="center"
             android:textSize="25dp" />
 

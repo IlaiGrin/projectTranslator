@@ -13,6 +13,7 @@ public class VocabularyDB {
     private Context context;
     private Languages languages;
     private HashMap<String, ArrayList<String>> dataBase;
+    private String key;         //used to save the route in Realtime DB
 
     public VocabularyDB(Languages languages, Context context){
         this.languages = languages;

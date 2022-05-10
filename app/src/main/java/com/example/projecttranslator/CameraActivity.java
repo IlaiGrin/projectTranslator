@@ -91,7 +91,10 @@ public class CameraActivity extends AppCompatActivity {
             cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, useCaseGroup);
             });
 
-        findViewById(R.id.backward_img).setOnClickListener(view -> startActivity(new Intent(this, AddWordFragment.class)));
+        findViewById(R.id.backward_img).setOnClickListener(view ->{
+            Intent returnIntent = new Intent(this, MainActivity.class).putExtra("open_translator", true);
+            startActivity(returnIntent);
+        });
     }
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override

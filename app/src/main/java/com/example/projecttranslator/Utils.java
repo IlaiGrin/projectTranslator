@@ -8,7 +8,8 @@ import android.widget.EditText;
 
 import java.util.Random;
 
-public class Functions {
+public class Utils {
+    public static  User user = new User();
     public static Random rnd = new Random();
     public static int dpToPx(int dps, Context context) {
         // Get the screen's density scale

@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SignUpActivity extends AppCompatActivity {
-EditText email, password;
+EditText email, password, username;
 FirebaseAuth firebaseAuth;
 
     @Override
@@ -21,16 +21,21 @@ FirebaseAuth firebaseAuth;
         firebaseAuth = FirebaseAuth.getInstance();
         password = findViewById(R.id.password_edit_txt);
         email = findViewById(R.id.email_edit_txt);
+        username = findViewById(R.id.username_edit_txt);
 
         findViewById(R.id.sign_up_btn).setOnClickListener(view -> {
-            if(!Functions.isDetailsEmpty(email, password)){
+            if(!Utils.isDetailsEmpty(email, password)){
                 firebaseAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                         .addOnFailureListener(e -> Toast.makeText(this, e.getMessage()+"", Toast.LENGTH_LONG).show())
                         .addOnSuccessListener(authResult1 -> {
                             Toast.makeText(this, "user was created", Toast.LENGTH_SHORT).show();
                             firebaseAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                                     .addOnFailureListener(e -> Toast.makeText(this, e.getMessage()+"", Toast.LENGTH_LONG).show())
-                                    .addOnSuccessListener(authResult2 -> startActivity(new Intent(this, MainActivity.class)));
+                                    .addOnSuccessListener(authResult2 ->{
+                                        Utils.user = new User();
+                                        Utils.user.updateUsername(username.getText().toString());   //add username
+                                        startActivity(new Intent(this, MainActivity.class));
+                                    });
                         });
             }
         });

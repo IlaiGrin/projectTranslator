@@ -22,10 +22,13 @@ FirebaseAuth firebaseAuth;
         email = findViewById(R.id.email_edit_txt);
 
         findViewById(R.id.log_in_btn).setOnClickListener(view -> {
-            if(!Functions.isDetailsEmpty(email, password)){
+            if(!Utils.isDetailsEmpty(email, password)){
                 firebaseAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                     .addOnFailureListener(e -> Toast.makeText(this, e.getMessage()+"", Toast.LENGTH_LONG).show())
-                    .addOnSuccessListener(authResult -> startActivity(new Intent(this, MainActivity.class)));
+                    .addOnSuccessListener(authResult -> {
+                        Utils.user = new User();
+                        startActivity(new Intent(this, MainActivity.class));
+                    });
             }
         });
 
