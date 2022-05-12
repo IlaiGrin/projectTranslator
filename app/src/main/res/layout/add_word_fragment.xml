@@ -70,7 +70,8 @@
             android:layout_height="wrap_content"
             android:text="@string/display_translation_preview"
             android:textColor="@color/black"
-            android:textSize="30dp" />
+            android:textSize="30dp"
+            android:layout_marginLeft="10dp"/>
 
         <ImageView
             android:id="@+id/add_translation_btn"
@@ -81,7 +82,8 @@
             android:scaleType="centerCrop"
             android:src="@drawable/plus_img"
             android:visibility="gone"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/additional_translation_layout"
@@ -93,7 +95,8 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_below="@+id/display_txt"
             android:visibility="gone"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp">
 
         <EditText
             android:id="@+id/additional_translation_edit_txt"

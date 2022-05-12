@@ -21,13 +21,16 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/username_edit_txt_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:endIconMode="custom"
-        app:startIconDrawable="@drawable/ic_edit"
         app:layout_constraintBottom_toTopOf="@+id/log_out_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.211"
+        app:startIconDrawable="@drawable/ic_edit"
         tools:ignore="MissingConstraints">
 
         <TextView
@@ -36,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="Username: "
             android:textColor="@color/black"
-            android:textSize="30dp"/>
+            android:textSize="30dp" />
 
         <EditText
             android:id="@+id/username_edit_txt"

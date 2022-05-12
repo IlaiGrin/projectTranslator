@@ -15,9 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
-Dialog logInDialog;
-ImageView plusBtn;
-Button logInBtn;
+BottomNavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +23,8 @@ Button logInBtn;
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-
-
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new ProfileFragment()).commit();     //start with profile fragment
-        BottomNavigationView navigationView = findViewById(R.id.bottomNavBar);
+        navigationView = findViewById(R.id.bottomNavBar);
         navigationView.setOnNavigationItemSelectedListener(navListener);
 
         if(getIntent() != null && getIntent().getBooleanExtra("open_translator", false))    //when returning from camera
