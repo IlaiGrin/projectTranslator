@@ -1,6 +1,7 @@
 package com.example.projecttranslator;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,6 +25,7 @@ public class User {
 
     public User(Context context){
         this.context = context;
+        this.dictionary = new ArrayList<>();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if(firebaseUser != null){
             email = firebaseUser.getEmail();
@@ -37,23 +39,32 @@ public class User {
                 .setDisplayName(username).build());
     }
 
-    public void addVocabularyDB(VocabularyDB vocabulary){
-        dictionary.add(vocabulary);
-        FirebaseDBManager.addVocabularyDB(context, vocabulary);
-    }
-
     public void setNativeLanguage(String nativeLanguage){
         this.nativeLanguage = nativeLanguage;
         FirebaseDBManager.saveNativeLanguage(context, nativeLanguage);
     }
 
     public VocabularyDB getVocabularyDB(Languages languages){   //returns the vocabulary that has the same languages
-        for (VocabularyDB vocabulary : dictionary) {
-            if(vocabulary.getToLanguage().equals(languages.getToLanguage())
-                    && vocabulary.getFromLanguage().equals(languages.getFromLanguage()))
-                return vocabulary;
+        VocabularyDB vocabularyDB = null;
+        Languages newLanguages = new Languages(languages.getFromLanguage(), languages.getToLanguage()); //to not change the current one
+        //arrange: from language -> to native language
+        if(!languages.getToLanguage().equals(nativeLanguage)){
+            String temp = newLanguages.getFromLanguage();
+            newLanguages.setFromLanguage(languages.getToLanguage());
+            newLanguages.setToLanguage(temp);
         }
-        return null;
+        for (VocabularyDB vocabulary : dictionary) {
+            if(vocabulary.getToLanguage().equals(newLanguages.getToLanguage())
+                    && vocabulary.getFromLanguage().equals(newLanguages.getFromLanguage()))
+                vocabularyDB = vocabulary;
+        }
+        //if doesn't exist, creating a new one
+        if (vocabularyDB == null){
+            vocabularyDB = new VocabularyDB(newLanguages, context);
+            FirebaseDBManager.addVocabularyDB(context, vocabularyDB);   //save in firebase
+            dictionary.add(vocabularyDB);
+        }
+        return vocabularyDB;
     }
 
     public boolean isLoggedIn(){

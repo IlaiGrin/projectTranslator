@@ -60,32 +60,25 @@ public class WordTranslator {
     private void setProgressBar(boolean inProgress) {
         if(inProgress){
             downloadModelBar.setVisibility(View.VISIBLE);
-            for (int i = 0; i < layout.getChildCount(); i++) {  //disable all views
-                View child = layout.getChildAt(i);
-                if(child instanceof LinearLayout) {     //if it is a linear layout
-                    for (int j = 0; j < ((LinearLayout)child).getChildCount(); j++)
-                        ((LinearLayout)child).getChildAt(j).setEnabled(false);
-                }
-                if(child instanceof RelativeLayout) {     //if it is a relative layout
-                    for (int j = 0; j < ((RelativeLayout)child).getChildCount(); j++)
-                        ((RelativeLayout)child).getChildAt(j).setEnabled(false);
-                }
-                child.setEnabled(false);
-            }
+            setViewsEnable(false);
         }else {
             downloadModelBar.setVisibility(View.GONE);
-            for (int i = 0; i < layout.getChildCount(); i++) {  //enable all views
-                View child = layout.getChildAt(i);
-                if(child instanceof LinearLayout) {     //if it is a linear layout
-                    for (int j = 0; j < ((LinearLayout)child).getChildCount(); j++)
-                        ((LinearLayout)child).getChildAt(j).setEnabled(true);
-                }
-                if(child instanceof RelativeLayout) {     //if it is a relative layout
-                    for (int j = 0; j < ((RelativeLayout)child).getChildCount(); j++)
-                        ((RelativeLayout)child).getChildAt(j).setEnabled(true);
-                }
-                child.setEnabled(true);
+            setViewsEnable(true);
+        }
+    }
+
+    private void setViewsEnable(boolean isEnable){
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View child = layout.getChildAt(i);
+            if(child instanceof LinearLayout) {     //if it is a linear layout
+                for (int j = 0; j < ((LinearLayout)child).getChildCount(); j++)
+                    ((LinearLayout)child).getChildAt(j).setEnabled(isEnable);
             }
+            if(child instanceof RelativeLayout) {     //if it is a relative layout
+                for (int j = 0; j < ((RelativeLayout)child).getChildCount(); j++)
+                    ((RelativeLayout)child).getChildAt(j).setEnabled(isEnable);
+            }
+            child.setEnabled(isEnable);
         }
     }
 }

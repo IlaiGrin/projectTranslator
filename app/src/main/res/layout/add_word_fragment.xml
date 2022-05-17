@@ -66,19 +66,19 @@
         android:layout_marginTop="20dp">
 
         <TextView
-            android:id="@+id/display_txt"
+            android:id="@+id/translation_txt"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:text="@string/display_translation_preview"
             android:textColor="@color/black"
-            android:textSize="30dp"
-            android:layout_marginLeft="10dp"/>
+            android:textSize="30dp" />
 
         <ImageView
             android:id="@+id/add_translation_btn"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_below="@+id/display_txt"
+            android:layout_below="@+id/translation_txt"
             android:background="@drawable/green_btn"
             android:scaleType="centerCrop"
             android:src="@drawable/plus_img"
@@ -94,7 +94,7 @@
             app:endIconMode="clear_text"
             android:inputType="text"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_below="@+id/display_txt"
+            android:layout_below="@+id/translation_txt"
             android:visibility="gone"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp">
@@ -113,7 +113,7 @@
             android:layout_height="45dp"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="90dp"
-            android:layout_toRightOf="@+id/display_txt"
+            android:layout_toRightOf="@+id/translation_txt"
             android:backgroundTint="@color/teal_200"
             android:text="save"
             android:visibility="gone" />
@@ -122,11 +122,11 @@
             android:id="@+id/save_btn2"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
-            android:layout_below="@+id/display_txt"
+            android:layout_below="@+id/translation_txt"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="90dp"
             android:layout_marginTop="20dp"
-            android:layout_toRightOf="@+id/display_txt"
+            android:layout_toRightOf="@+id/translation_txt"
             android:backgroundTint="@color/teal_200"
             android:text="save"
             android:visibility="gone" />
