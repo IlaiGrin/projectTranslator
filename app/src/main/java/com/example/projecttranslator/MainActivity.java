@@ -23,15 +23,16 @@ BottomNavigationView navigationView;
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
+        Utils.user = new User(this);
+        if(!Utils.user.isLoggedIn())
+            startActivity(new Intent(this, LogInActivity.class));
+
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new ProfileFragment()).commit();     //start with profile fragment
         navigationView = findViewById(R.id.bottomNavBar);
         navigationView.setOnNavigationItemSelectedListener(navListener);
 
         if(getIntent() != null && getIntent().getBooleanExtra("open_translator", false))    //when returning from camera
             navigationView.findViewById(R.id.translator).callOnClick();
-
-        if(!Utils.user.isLoggedIn())
-            startActivity(new Intent(this, LogInActivity.class));
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = item -> {

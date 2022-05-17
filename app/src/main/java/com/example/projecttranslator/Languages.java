@@ -16,23 +16,25 @@ import java.util.HashMap;
 public class Languages {
 
     private String fromLanguage, toLanguage;
-    private String[] toLanguages, fromLanguages;
+    private static String[] Languages = new String[]{"English", "Hebrew", "Arabic"};
+    private static String[] toLanguages = new String[]{"To", "English", "Hebrew", "Arabic"};
+    private static String[] fromLanguages = new String[]{"From", "English", "Hebrew", "Arabic"};
     private FirebaseLanguageIdentification identifier;
 
     public Languages(String fromLanguage, String toLanguage){
         this.fromLanguage = fromLanguage;
         this.toLanguage = toLanguage;
-        toLanguages = new String[]{"To", "English", "Hebrew", "Arabic"};
-        fromLanguages = new String[]{"From", "English", "Hebrew", "Arabic"};
         identifier = FirebaseNaturalLanguage.getInstance().getLanguageIdentification();
     }
 
-    public String[] getToLanguagesArray() { return toLanguages; }
-    public String[] getFromLanguagesArray() { return fromLanguages; }
-
+    //Getters
+    public static String[] getToLanguagesArray() { return toLanguages; }
+    public static String[] getFromLanguagesArray() { return fromLanguages; }
+    public static String[] getLanguages() { return Languages; }
     public String getFromLanguage() { return fromLanguage; }
     public String getToLanguage() { return toLanguage; }
 
+    //Setter
     public void setFromLanguage(String fromLanguage) { this.fromLanguage = fromLanguage; }
     public void setToLanguage(String toLanguage) { this.toLanguage = toLanguage; }
 

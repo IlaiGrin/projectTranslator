@@ -5,4 +5,5 @@
     <string name="firebase_user_setting">usersSettings</string>
     <string name="firebase_user_words">usersWords</string>
     <string name="firebase_user_vocabulary_options">usersVocabularyOptions</string>
+    <string name="firebase_user_native_language">native</string>
 </resources>

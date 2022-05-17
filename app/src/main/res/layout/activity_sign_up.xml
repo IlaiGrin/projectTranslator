@@ -78,6 +78,23 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Native language"
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center" />
+
+    <Spinner
+        android:id="@+id/select_native_language_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center" />
+
     <Button
         android:id="@+id/sign_up_btn"
         android:layout_width="wrap_content"
@@ -88,7 +105,7 @@
         android:layout_gravity="center"
         android:background="@drawable/btns_background"
         app:backgroundTint="@null"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         />
 
     <ImageView

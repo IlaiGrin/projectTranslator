@@ -10,15 +10,26 @@ import java.util.Locale;
 
 public class VocabularyDB {
 
+    //Members
     private Context context;
     private Languages languages;
     private HashMap<String, ArrayList<String>> dataBase;
     private String key;         //used to save the route in Realtime DB
 
+    //Getters
+    public Languages getLanguages() { return languages; }
+    public String getToLanguage(){ return languages.getToLanguage();}
+    public String getFromLanguage(){ return languages.getFromLanguage();}
+    public String getKey() { return key; }
+    public HashMap<String, ArrayList<String>> getDataBase() { return dataBase; }
+
+    //Setters
+    public void setKey(String key) { this.key = key; }
+
     public VocabularyDB(Languages languages, Context context){
         this.languages = languages;
         this.context = context;
-        dataBase = new HashMap<String, ArrayList<String>>();
+        dataBase = new HashMap();
     }
 
     public void addTranslation(String sourceWord, String translation){
@@ -31,9 +42,11 @@ public class VocabularyDB {
                 ArrayList<String> translations = new ArrayList<String>();
                 translations.add(translation);
                 dataBase.put(sourceWord, translations);
-            } else if(!dataBase.get(sourceWord).contains(translation))      //if translation doesn't exist in DB
+                FirebaseDBManager.updateDataBase(context,this);
+            } else if(!dataBase.get(sourceWord).contains(translation)) {     //if translation doesn't exist in DB
                 dataBase.get(sourceWord).add(translation);  //add the translation
-            else
+                FirebaseDBManager.updateDataBase(context,this);
+            } else
                 Toast.makeText(context,"translation already exists",Toast.LENGTH_SHORT).show();
         } else
             Toast.makeText(context,"words doesn't match the languages saved in the database",Toast.LENGTH_LONG).show();

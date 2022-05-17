@@ -151,8 +151,10 @@ public class AddWordFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == MICROPHONE_CODE){
-            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            input.setText(result.get(0).split(" ", 2)[0]);
+            if(data != null) {
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                input.setText(result.get(0).split(" ", 2)[0]);
+            }
         }
     }
 
