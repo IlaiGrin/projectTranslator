@@ -1,5 +1,6 @@
 package com.example.projecttranslator;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ public class ProfileFragment extends Fragment {
     ArrayAdapter adaptor;
     Context context;
     boolean isSpinnerBuilt;
+    Dialog dialog;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -75,8 +77,17 @@ public class ProfileFragment extends Fragment {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(getContext(), LogInActivity.class));
         });
-    }
 
+        getView().findViewById(R.id.native_language_info_img).setOnClickListener(view1 -> {
+            nativeLanguageDialog();
+        });
+    }
+    private void nativeLanguageDialog(){
+        dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.native_dialog);
+        dialog.setCancelable(true);
+        dialog.show();
+    }
     private void initializeSpinner(){
         //initialize the native language spinner
         spinner = getView().findViewById(R.id.select_native_language_spinner);

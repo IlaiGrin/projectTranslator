@@ -33,6 +33,10 @@ public class User {
         }
     }
 
+    public void addVocabularyDB(VocabularyDB vocabularyDB){
+        dictionary.add(vocabularyDB);
+    }
+
     public void updateUsername(String username){
         this.username = username;
         firebaseUser.updateProfile(new UserProfileChangeRequest.Builder()
@@ -44,7 +48,7 @@ public class User {
         FirebaseDBManager.saveNativeLanguage(context, nativeLanguage);
     }
 
-    public VocabularyDB getVocabularyDB(Languages languages){   //returns the vocabulary that has the same languages
+    public VocabularyDB getVocabularyByLanguages(Languages languages){   //returns the vocabulary that has the same languages
         VocabularyDB vocabularyDB = null;
         Languages newLanguages = new Languages(languages.getFromLanguage(), languages.getToLanguage()); //to not change the current one
         //arrange: from language -> to native language
@@ -63,6 +67,15 @@ public class User {
             vocabularyDB = new VocabularyDB(newLanguages, context);
             FirebaseDBManager.addVocabularyDB(context, vocabularyDB);   //save in firebase
             dictionary.add(vocabularyDB);
+        }
+        return vocabularyDB;
+    }
+
+    public VocabularyDB getVocabularyByKey(String key){   //returns the vocabulary that has the same key
+        VocabularyDB vocabularyDB = null;
+        for (VocabularyDB vocabulary : dictionary) {
+            if(vocabulary.getKey().equals(key))
+                return vocabulary;
         }
         return vocabularyDB;
     }

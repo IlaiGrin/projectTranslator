@@ -2,9 +2,14 @@ package com.example.projecttranslator;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Size;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import java.util.Random;
 
@@ -39,5 +44,30 @@ public class Utils {
             return true;
         }
         return false;
+    }
+
+    public static void setViewsEnable(LinearLayout layout, boolean isEnable){
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View child = layout.getChildAt(i);
+            if(child instanceof LinearLayout) {     //if it is a linear layout
+                for (int j = 0; j < ((LinearLayout)child).getChildCount(); j++)
+                    ((LinearLayout)child).getChildAt(j).setEnabled(isEnable);
+            }
+            if(child instanceof RelativeLayout) {     //if it is a relative layout
+                for (int j = 0; j < ((RelativeLayout)child).getChildCount(); j++)
+                    ((RelativeLayout)child).getChildAt(j).setEnabled(isEnable);
+            }
+            child.setEnabled(isEnable);
+        }
+    }
+
+    public static void setProgressBar(LinearLayout layout, ProgressBar progressBar, boolean inProgress) {
+        if(inProgress){
+            progressBar.setVisibility(View.VISIBLE);
+            setViewsEnable(layout, false);
+        }else {
+            progressBar.setVisibility(View.GONE);
+            setViewsEnable(layout, true);
+        }
     }
 }

@@ -26,7 +26,6 @@ FirebaseAuth firebaseAuth;
                 firebaseAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                     .addOnFailureListener(e -> Toast.makeText(this, e.getMessage()+"", Toast.LENGTH_LONG).show())
                     .addOnSuccessListener(authResult -> {
-                        Utils.user = new User(this);
                         startActivity(new Intent(this, MainActivity.class));
                     });
             }

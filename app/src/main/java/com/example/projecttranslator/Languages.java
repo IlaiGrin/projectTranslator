@@ -27,6 +27,8 @@ public class Languages {
         identifier = FirebaseNaturalLanguage.getInstance().getLanguageIdentification();
     }
 
+    public Languages(){}
+
     //Getters
     public static String[] getToLanguagesArray() { return toLanguages; }
     public static String[] getFromLanguagesArray() { return fromLanguages; }

@@ -26,6 +26,7 @@ public class VocabularyDB {
 
     //Setters
     public void setKey(String key) { this.key = key; }
+    public void setDataBase(HashMap<String, ArrayList<String>> dataBase) { this.dataBase = dataBase; }
 
     public VocabularyDB(Languages languages, Context context){
         this.languages = languages;

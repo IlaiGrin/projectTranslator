@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="The words you translate are required to be either from the native language to another language or from another language to the native language, and stored in a uniform format:\nforeign language -> \nnative language"
+        android:textColor="@color/black"
+        android:textSize="25dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

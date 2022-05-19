@@ -20,6 +20,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +45,8 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
     SharedPreferences.Editor editor;
     NetworkChangeReceiver networkReceiver;
     Context context;
+    LinearLayout layout;
+    ProgressBar progressBar;
 
     public AddWordFragment() {}// Required empty public constructor
 
@@ -68,10 +72,16 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
         additionalTranslationLayout = getView().findViewById(R.id.additional_translation_layout);
         saveBtn2 = getView().findViewById(R.id.save_btn2);
         saveBtn1 = getView().findViewById(R.id.save_btn1);
-        translator = new WordTranslator(context, input, translationTxt,
-                getView().findViewById(R.id.progress_bar), getView().findViewById(R.id.add_word_screen));
+        layout = getView().findViewById(R.id.add_word_screen);
+        progressBar = getView().findViewById(R.id.progress_bar);
+        translator = new WordTranslator(context, input, translationTxt, progressBar, layout);
+
+        Log.d("debug1", "empty "+Utils.user.getDictionary().isEmpty());
+        if(Utils.user.getDictionary().isEmpty())   //if user has no DB
+            FirebaseDBManager.readVocabularyDBs(context, layout, progressBar);
+
         //follow network state - mic is unavailable without connection
-        networkReceiver = new NetworkChangeReceiver(getView().findViewById(R.id.mic_img));
+        networkReceiver = new NetworkChangeReceiver(getView().findViewById(R.id.mic_img), saveBtn1, saveBtn2);
         context.registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         getView().findViewById(R.id.translate_btn).setOnClickListener(this);
@@ -84,14 +94,21 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
     }
 
     private void saveWord(TextView translation){
-        if(!languages.getToLanguage().equals(Utils.user.getNativeLanguage()) &&
-                !languages.getFromLanguage().equals(Utils.user.getNativeLanguage()))    //can't save without native language
-            Toast.makeText(context,"must include native language",Toast.LENGTH_SHORT).show();
-        else if(languages.getToLanguage().equals(Utils.user.getNativeLanguage()))
-            Utils.user.getVocabularyDB(languages).addTranslation(input.getText().toString(), translation.getText().toString());
-        else
-            Utils.user.getVocabularyDB(languages).addTranslation(translation.getText().toString(), input.getText().toString());
-
+        if(saveBtn1.getTag().equals(R.color.red))
+            Toast.makeText(context,"no Internet",Toast.LENGTH_SHORT).show();
+        else {
+            if (input.getText().toString().equals("")) {
+                input.setError("Enter a word");
+                input.requestFocus();
+            }
+            if (!languages.getToLanguage().equals(Utils.user.getNativeLanguage()) &&
+                    !languages.getFromLanguage().equals(Utils.user.getNativeLanguage()))    //can't save without native language
+                Toast.makeText(context, "must include native language", Toast.LENGTH_SHORT).show();
+            else if (languages.getToLanguage().equals(Utils.user.getNativeLanguage()))
+                Utils.user.getVocabularyByLanguages(languages).addTranslation(input.getText().toString(), translation.getText().toString());
+            else
+                Utils.user.getVocabularyByLanguages(languages).addTranslation(translation.getText().toString(), input.getText().toString());
+        }
     }
 
     @Override
@@ -170,7 +187,7 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
                         additionalTranslationLayout.setVisibility(View.VISIBLE);
                         saveBtn2.setVisibility(View.VISIBLE);
                         saveBtn2.setOnClickListener(save2 ->{
-                            if(additionalTranslation.getText().equals("")) {
+                            if(additionalTranslation.getText().toString().equals("")) {
                                 additionalTranslation.setError("Enter a translation");
                                 additionalTranslation.requestFocus();
                             } else
