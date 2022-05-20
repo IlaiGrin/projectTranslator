@@ -81,6 +81,8 @@ public class ProfileFragment extends Fragment {
         getView().findViewById(R.id.native_language_info_img).setOnClickListener(view1 -> {
             nativeLanguageDialog();
         });
+
+        Utils.putStringInSP(context, "previous_fragment","profile");
     }
     private void nativeLanguageDialog(){
         dialog = new Dialog(getContext());

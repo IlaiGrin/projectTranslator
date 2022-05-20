@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -40,16 +41,20 @@ BottomNavigationView navigationView;
 
         switch (item.getItemId()){
             case R.id.profile:
-                selectedFragment = new ProfileFragment();
+                if(!Utils.getStringFromSP(this, "previous_fragment").equals("profile"))
+                    selectedFragment = new ProfileFragment();
                 break;
             case R.id.translator:
-                selectedFragment = new AddWordFragment();
+                if(!Utils.getStringFromSP(this, "previous_fragment").equals("translator"))
+                    selectedFragment = new AddWordFragment();
                 break;
             case R.id.vocabulary:
-                selectedFragment = new VocabularyFragment();
+                if(!Utils.getStringFromSP(this, "previous_fragment").equals("vocabulary"))
+                    selectedFragment = new VocabularyFragment();
                 break;
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, selectedFragment).commit();  //replacing the fragment
+        if(selectedFragment != null)
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, selectedFragment).commit();  //replacing the fragment
         return true;
     };
 }

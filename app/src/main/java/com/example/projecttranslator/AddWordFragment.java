@@ -32,6 +32,13 @@ import java.util.ArrayList;
 
 public class AddWordFragment extends Fragment implements View.OnClickListener {
 
+    public AddWordFragment() {}// Required empty public constructor
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.add_word_fragment, container, false);
+    }
+
     private static final int MICROPHONE_CODE = 1;
     Languages languages;
     Spinner toSpinner, fromSpinner;
@@ -41,28 +48,17 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
     TextView translationTxt;
     TextInputLayout additionalTranslationLayout;
     Button saveBtn1, saveBtn2;
-    SharedPreferences sharedPref;
-    SharedPreferences.Editor editor;
     NetworkChangeReceiver networkReceiver;
     Context context;
     LinearLayout layout;
     ProgressBar progressBar;
-
-    public AddWordFragment() {}// Required empty public constructor
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.add_word_fragment, container, false);
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         context = getContext();
-        sharedPref = context.getSharedPreferences(getResources().getString(R.string.shared_preference_name), Context.MODE_PRIVATE);
-        editor = sharedPref.edit();
-        languages = new Languages(sharedPref.getString("from_language","From"),sharedPref.getString("to_language","To"));
+        languages = new Languages(Utils.getStringFromSP(context, "from_language"),Utils.getStringFromSP(context, "to_language"));
         //select languages spinners
         initializeSpinners();
         //initialize members
@@ -77,7 +73,7 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
         translator = new WordTranslator(context, input, translationTxt, progressBar, layout);
 
         Log.d("debug1", "empty "+Utils.user.getDictionary().isEmpty());
-        if(Utils.user.getDictionary().isEmpty())   //if user has no DB
+        if(Utils.user.getDictionary().isEmpty() || Utils.user.getDictionary().get(0).getDataBase().isEmpty())   //if user has no DB or only read options
             FirebaseDBManager.readVocabularyDBs(context, layout, progressBar);
 
         //follow network state - mic is unavailable without connection
@@ -91,6 +87,8 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
         getView().findViewById(R.id.camera_img).setOnClickListener(this);
 
         getView().findViewById(R.id.switch_languages_img).setOnClickListener(this);
+
+        Utils.putStringInSP(getContext(),"previous_fragment", "translator");
     }
 
     private void saveWord(TextView translation){
@@ -135,7 +133,7 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 languages.setToLanguage(languages.getToLanguagesArray()[i]);
-                editor.putString("to_language", languages.getToLanguagesArray()[i]).commit();
+                Utils.putStringInSP(context, "to_language", languages.getToLanguagesArray()[i]);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) { }
@@ -143,7 +141,8 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
         toAdaptor = new ArrayAdapter(context, R.layout.spinner_item, languages.getToLanguagesArray());
         toAdaptor.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         toSpinner.setAdapter(toAdaptor);
-        toSpinner.setSelection(toAdaptor.getPosition(languages.getToLanguage()));
+        if(!languages.getToLanguage().equals(""))
+            toSpinner.setSelection(toAdaptor.getPosition(languages.getToLanguage()));
 
         //initialize the select from language spinner
         fromSpinner = getView().findViewById(R.id.select_from_language_spinner);
@@ -151,7 +150,7 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 languages.setFromLanguage(languages.getFromLanguagesArray()[i]);
-                editor.putString("from_language", languages.getFromLanguagesArray()[i]).commit();
+                Utils.putStringInSP(context, "from_language", languages.getToLanguagesArray()[i]);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) { }
@@ -159,7 +158,8 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
         fromAdaptor = new ArrayAdapter(context, R.layout.spinner_item,  languages.getFromLanguagesArray());
         fromAdaptor.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         fromSpinner.setAdapter(fromAdaptor);
-        fromSpinner.setSelection(toAdaptor.getPosition(languages.getFromLanguage()));
+        if(!languages.getToLanguage().equals(""))
+            fromSpinner.setSelection(toAdaptor.getPosition(languages.getFromLanguage()));
     }
 
     @Override
