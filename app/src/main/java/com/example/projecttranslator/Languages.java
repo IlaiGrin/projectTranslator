@@ -19,12 +19,12 @@ public class Languages {
     private static String[] Languages = new String[]{"English", "Hebrew", "Arabic"};
     private static String[] toLanguages = new String[]{"To", "English", "Hebrew", "Arabic"};
     private static String[] fromLanguages = new String[]{"From", "English", "Hebrew", "Arabic"};
-    private FirebaseLanguageIdentification identifier;
+    //private FirebaseLanguageIdentification identifier;
 
     public Languages(String fromLanguage, String toLanguage){
         this.fromLanguage = fromLanguage;
         this.toLanguage = toLanguage;
-        identifier = FirebaseNaturalLanguage.getInstance().getLanguageIdentification();
+        //identifier = FirebaseNaturalLanguage.getInstance().getLanguageIdentification();
     }
 
     public Languages(){}
@@ -35,6 +35,8 @@ public class Languages {
     public static String[] getLanguages() { return Languages; }
     public String getFromLanguage() { return fromLanguage; }
     public String getToLanguage() { return toLanguage; }
+    public String getFromLanguageCode(){ return getLanguageCode(fromLanguage); }
+    public String getToLanguageCode(){ return getLanguageCode(toLanguage); }
 
     //Setter
     public void setFromLanguage(String fromLanguage) { this.fromLanguage = fromLanguage; }
@@ -52,10 +54,9 @@ public class Languages {
         return "";
     }
 
-    public String getFromLanguageCode(){ return getLanguageCode(fromLanguage); }
-    public String getToLanguageCode(){ return getLanguageCode(toLanguage); }
 
-    public String identifyLanguageCode(String input){
+
+    /*public String identifyLanguageCode(String input){
         final String[] languageCode = {""};
         identifier.identifyLanguage(input).addOnSuccessListener(new OnSuccessListener<String>() {
             @Override
@@ -65,5 +66,5 @@ public class Languages {
             }
         });
         return languageCode[0];
-    }
+    }*/
 }

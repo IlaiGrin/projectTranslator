@@ -80,6 +80,17 @@ public class User {
         return vocabularyDB;
     }
 
+    public void removeWord(String vocabularyKey, String word){
+        VocabularyDB vocabulary = getVocabularyByKey(vocabularyKey);
+        if(vocabulary != null){
+            vocabulary.removeWord(word);
+            if(vocabulary.getDataBase().isEmpty()) {
+                dictionary.remove(vocabulary);
+                FirebaseDBManager.deleteVocabularyOption(context, vocabularyKey);
+            }
+        }
+    }
+
     public boolean isLoggedIn(){
         return firebaseUser != null;
     }

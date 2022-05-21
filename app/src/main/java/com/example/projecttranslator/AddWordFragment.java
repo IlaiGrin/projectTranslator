@@ -121,7 +121,8 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
         if (requestCode == MICROPHONE_CODE){
             if(data != null) {
                 ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                input.setText(result.get(0).split(" ", 2)[0]);
+                //input.setText(result.get(0).split(" ", 2)[0]);
+                input.setText(result.get(0));
             }
         }
     }

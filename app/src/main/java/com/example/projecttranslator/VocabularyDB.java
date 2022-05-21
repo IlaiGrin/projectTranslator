@@ -53,4 +53,7 @@ public class VocabularyDB {
         } else
             Toast.makeText(context,"translation already exists",Toast.LENGTH_SHORT).show();
     }
+    public void removeWord(String word){
+        dataBase.remove(word);
+    }
 }

@@ -2,11 +2,12 @@ package com.example.projecttranslator;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,8 +41,9 @@ public class VocabularyFragment extends Fragment {
     public static void displayVocabularyOptions(Context context, List<VocabularyDB> vocabularyList){
         ListView listView = ((Activity)context).findViewById(R.id.list_view);
         TextView title = ((Activity)context).findViewById(R.id.vocabulary_fragment_title);
-        title.setText("Options");
-        listView.setAdapter(new VocabularyOptionsAdaptor(context, 0, 0, vocabularyList, listView, title));
+        if(title != null && listView != null) {
+            title.setText("Options");
+            listView.setAdapter(new VocabularyOptionsAdapter(context, 0, 0, vocabularyList, listView, title));
+        }
     }
-
 }

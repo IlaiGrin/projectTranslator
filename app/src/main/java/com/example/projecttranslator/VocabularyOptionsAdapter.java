@@ -11,13 +11,13 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class VocabularyOptionsAdaptor extends ArrayAdapter {
+public class VocabularyOptionsAdapter extends ArrayAdapter {
     private Context context;
     private List<VocabularyDB> objects;
     private ListView listView;      //get listView in order to change list when an item is clicked
     private TextView title;
 
-    public VocabularyOptionsAdaptor(Context context, int resource, int textViewResourceId, List<VocabularyDB> objects, ListView listView, TextView title){
+    public VocabularyOptionsAdapter(Context context, int resource, int textViewResourceId, List<VocabularyDB> objects, ListView listView, TextView title){
         super(context, resource, textViewResourceId, objects);
 
         this.context = context;
@@ -36,10 +36,7 @@ public class VocabularyOptionsAdaptor extends ArrayAdapter {
         fromLanguage.setText(objects.get(position).getFromLanguage());
         toLanguage.setText(objects.get(position).getToLanguage());
 
-        view.setOnClickListener(view1 -> {
-            title.setText("Words");
-            FirebaseDBManager.readWordsFromVocabulary(context, objects.get(position), listView);
-        });
+        view.setOnClickListener(view1 -> FirebaseDBManager.readWordsFromVocabulary(context, objects.get(position), listView, title));
         return view;
     }
 }

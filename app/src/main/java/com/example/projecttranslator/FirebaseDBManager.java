@@ -1,28 +1,24 @@
 package com.example.projecttranslator;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class FirebaseDBManager {
 
@@ -33,6 +29,15 @@ public class FirebaseDBManager {
 
     public static void setUserEmail(String email){ userEmail = email.replace(".",""); }//remove "." because firebase do not allow "."
 
+    public static void deleteWord(Context context, String vocabularyKey, String word){
+        reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabularyKey).child(word).removeValue();
+    }
+
+    public static void deleteVocabularyOption(Context context, String vocabularyKey){
+        reference.child(context.getString(R.string.firebase_user_vocabulary_options)).child(userEmail).child(vocabularyKey).removeValue();
+    }
+
+    //writers
     public static void addUser(Context context){
         //inserting user's settings
         reference.child(context.getString(R.string.firebase_user_setting)).child(userEmail).child(context.getString(R.string.firebase_user_native_language)).setValue(Utils.user.getNativeLanguage());
@@ -45,7 +50,7 @@ public class FirebaseDBManager {
         }
     }
 
-    //updates to words in DB
+    //updates words in DB
     public static void updateDataBase(Context context, VocabularyDB vocabulary){  reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabulary.getKey()).setValue(vocabulary.getDataBase());}
 
     public static void addVocabularyDB(Context context, VocabularyDB vocabulary){
@@ -57,24 +62,6 @@ public class FirebaseDBManager {
     }
     public static void saveNativeLanguage(Context context, String nativeLan){
         reference.child(context.getString(R.string.firebase_user_setting)).child(userEmail).child(context.getString(R.string.firebase_user_native_language)).setValue(nativeLan);
-    }
-
-    public static void readOnlyVocabularyOptions(Context context){
-        //read options
-        reference.child(context.getString(R.string.firebase_user_vocabulary_options)).child(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
-                    VocabularyDB vocabulary = new VocabularyDB(childDataSnapshot.getValue(Languages.class), context);
-                    vocabulary.setKey(childDataSnapshot.getKey());
-                    if(Utils.user.getVocabularyByKey(vocabulary.getKey()) == null)  //if the DB isn't saved already in user
-                        Utils.user.addVocabularyDB(vocabulary);
-                }
-                VocabularyFragment.displayVocabularyOptions(context, Utils.user.getDictionary());
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
     }
 
     //readers
@@ -112,12 +99,31 @@ public class FirebaseDBManager {
         });
     }
 
-    public static void readWordsFromVocabulary(Context context, VocabularyDB vocabularyDB, ListView listView){
+    public static void readOnlyVocabularyOptions(Context context){
+        //read options
+        reference.child(context.getString(R.string.firebase_user_vocabulary_options)).child(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+                    VocabularyDB vocabulary = new VocabularyDB(childDataSnapshot.getValue(Languages.class), context);
+                    vocabulary.setKey(childDataSnapshot.getKey());
+                    if(Utils.user.getVocabularyByKey(vocabulary.getKey()) == null)  //if the DB isn't saved already in user
+                        Utils.user.addVocabularyDB(vocabulary);
+                }
+                VocabularyFragment.displayVocabularyOptions(context, Utils.user.getDictionary());
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
+    }
+
+    public static void readWordsFromVocabulary(Context context, VocabularyDB vocabularyDB, ListView listView, TextView title){
         reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabularyDB.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 vocabularyDB.setDataBase((HashMap<String, ArrayList<String>>) snapshot.getValue());
-                listView.setAdapter(new VocabularyWordsAdaptor(context, 0,0, vocabularyDB.getDataBase()));
+                title.setText(vocabularyDB.getDataBase().size()+" Words");
+                listView.setAdapter(new VocabularyWordsAdapter(context, 0,0, vocabularyDB.getDataBase(), vocabularyDB.getKey(), title));
             }
 
             @Override
