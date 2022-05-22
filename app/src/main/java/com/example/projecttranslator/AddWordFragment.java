@@ -87,8 +87,6 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
         getView().findViewById(R.id.camera_img).setOnClickListener(this);
 
         getView().findViewById(R.id.switch_languages_img).setOnClickListener(this);
-
-        Utils.putStringInSP(getContext(),"previous_fragment", "translator");
     }
 
     private void saveWord(TextView translation){

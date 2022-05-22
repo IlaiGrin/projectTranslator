@@ -11,9 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign Up"
-        android:textSize="30dp"
+        android:textSize="50dp"
         android:textColor="@color/black"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:layout_marginTop="20dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/username_edit_txt_layout"
@@ -78,15 +79,31 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
-    <TextView
+    <LinearLayout
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Native language"
-        android:textColor="@color/black"
-        android:textSize="30dp"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center" />
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Native language"
+            android:textColor="@color/black"
+            android:textSize="30dp" />
+
+        <ImageView
+            android:id="@+id/native_language_info_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_info"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="20dp"/>
+
+    </LinearLayout>
+
+
 
     <Spinner
         android:id="@+id/select_native_language_spinner"

@@ -56,8 +56,4 @@ public class WordTranslator {
         }).addOnFailureListener(exception -> Toast.makeText(context, "Fail to download modal", Toast.LENGTH_SHORT).show())
         .addOnCompleteListener(complete ->Utils.setProgressBar(layout, downloadModelBar, false));
     }
-
-
-
-
 }

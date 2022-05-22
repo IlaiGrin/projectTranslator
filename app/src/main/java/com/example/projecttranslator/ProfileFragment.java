@@ -59,7 +59,10 @@ public class ProfileFragment extends Fragment {
         isSpinnerBuilt = false;
         initializeSpinner();
 
-        usernameDisplay.setText("Username: "+Utils.user.getUsername());
+        if(Utils.user.getUsername() == null)
+            usernameDisplay.setText("Username: ");
+        else
+            usernameDisplay.setText("Username: "+Utils.user.getUsername());
         usernameLayout.setStartIconOnClickListener(view1 -> {
             usernameEditText.setVisibility(View.VISIBLE);
             usernameLayout.setEndIconDrawable(R.drawable.ic_done);
@@ -79,18 +82,9 @@ public class ProfileFragment extends Fragment {
             startActivity(new Intent(getContext(), LogInActivity.class));
         });
 
-        getView().findViewById(R.id.native_language_info_img).setOnClickListener(view1 -> {
-            nativeLanguageDialog();
-        });
+        getView().findViewById(R.id.native_language_info_img).setOnClickListener(view1 -> Utils.nativeLanguageDialog(getContext()));
+    }
 
-        Utils.putStringInSP(context, "previous_fragment","profile");
-    }
-    private void nativeLanguageDialog(){
-        dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.native_dialog);
-        dialog.setCancelable(true);
-        dialog.show();
-    }
     private void initializeSpinner(){
         //initialize the native language spinner
         spinner = getView().findViewById(R.id.select_native_language_spinner);

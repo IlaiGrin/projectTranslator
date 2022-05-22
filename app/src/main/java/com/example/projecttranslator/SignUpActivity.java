@@ -51,6 +51,8 @@ FirebaseAuth firebaseAuth;
             }
         });
 
+        findViewById(R.id.native_language_info_img).setOnClickListener(view1 -> Utils.nativeLanguageDialog(this));
+
         findViewById(R.id.backward_img).setOnClickListener(view -> startActivity(new Intent(this, LogInActivity.class)));
     }
     private void initializeSpinner(){

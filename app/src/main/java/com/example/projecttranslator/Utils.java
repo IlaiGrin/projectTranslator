@@ -1,6 +1,7 @@
 package com.example.projecttranslator;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.Layout;
@@ -86,5 +87,12 @@ public class Utils {
             progressBar.setVisibility(View.GONE);
             setViewsEnable(layout, true);
         }
+    }
+
+    public static void nativeLanguageDialog(Context context){
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.native_dialog);
+        dialog.setCancelable(true);
+        dialog.show();
     }
 }

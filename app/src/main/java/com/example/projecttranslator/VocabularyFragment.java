@@ -34,8 +34,6 @@ public class VocabularyFragment extends Fragment {
             displayVocabularyOptions(getContext(), Utils.user.getDictionary());
         else
             FirebaseDBManager.readOnlyVocabularyOptions(getContext());
-
-        Utils.putStringInSP(getContext(),"previous_fragment", "vocabulary");
     }
 
     public static void displayVocabularyOptions(Context context, List<VocabularyDB> vocabularyList){
