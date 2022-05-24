@@ -45,7 +45,7 @@ Context context;
     private final BottomNavigationView.OnNavigationItemSelectedListener bottomNavSelection = item -> {
 
         // Each fragment gets an index between 1-3, starting from the right side of the Nav bar
-        // Play - 1, Achievement - 2, Personal Info - 3
+        // Profile - 3, Translator - 2, Vocabulary - 1
 
         int currentFragment = Integer.parseInt(Utils.getStringFromSP(context, "current_fragment"));
 
@@ -67,7 +67,6 @@ Context context;
 
         // Parse the fragment to travel to
         int travelToFragment = Integer.parseInt(Utils.getStringFromSP(context, "current_fragment"));
-        // Initialize the animations
         int in_anim , out_anim;
 
         // Following the algorithm stated above: assign values to the relative left fragment and the relative right one
@@ -91,27 +90,4 @@ Context context;
                 .commit();
         return true;
     };
-
-    /*private BottomNavigationView.OnNavigationItemSelectedListener navListener = item -> {
-        Fragment selectedFragment = null;
-
-        switch (item.getItemId()){
-            case R.id.profile:
-                if(!Utils.getStringFromSP(this, "previous_fragment").equals("profile"))
-                    selectedFragment = new ProfileFragment();
-                break;
-            case R.id.translator:
-                if(!Utils.getStringFromSP(this, "previous_fragment").equals("translator"))
-                    selectedFragment = new AddWordFragment();
-                break;
-            case R.id.vocabulary:
-                if(!Utils.getStringFromSP(this, "previous_fragment").equals("vocabulary"))
-                    selectedFragment = new VocabularyFragment();
-                break;
-        }
-        if(selectedFragment != null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, selectedFragment).commit();  //replacing the fragment
-        }
-        return true;
-    };*/
 }

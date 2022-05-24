@@ -36,7 +36,7 @@ FirebaseAuth firebaseAuth;
                 firebaseAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                         .addOnFailureListener(e -> Toast.makeText(this, e.getMessage()+"", Toast.LENGTH_LONG).show())
                         .addOnSuccessListener(authResult1 -> {
-                            Toast.makeText(this, "user was created", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "User was created", Toast.LENGTH_SHORT).show();
                             firebaseAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                                     .addOnFailureListener(e -> Toast.makeText(this, e.getMessage()+"", Toast.LENGTH_LONG).show())
                                     .addOnSuccessListener(authResult2 ->{

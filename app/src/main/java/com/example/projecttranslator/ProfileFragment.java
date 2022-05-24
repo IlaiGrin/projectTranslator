@@ -51,6 +51,7 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         context = getContext();
+        Utils.user = new User(context);
         usernameEditText = getView().findViewById(R.id.username_edit_txt);
         usernameLayout = getView().findViewById(R.id.username_edit_txt_layout);
         usernameDisplay = getView().findViewById(R.id.username_display);

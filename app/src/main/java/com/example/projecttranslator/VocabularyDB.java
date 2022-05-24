@@ -39,19 +39,19 @@ public class VocabularyDB {
         translation = translation.toLowerCase(Locale.ROOT);
 
         if(sourceWord.equals(translation))
-            Toast.makeText(context,"invalid",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"Invalid",Toast.LENGTH_SHORT).show();
         else if(dataBase.get(sourceWord) == null) {      //if word doesn't exist in DB
             ArrayList<String> translations = new ArrayList<String>();
             translations.add(translation);
             dataBase.put(sourceWord, translations);
             FirebaseDBManager.updateDataBase(context,this);
-            Toast.makeText(context,"saved",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"Saved",Toast.LENGTH_SHORT).show();
         } else if(!dataBase.get(sourceWord).contains(translation)) {     //if translation doesn't exist in DB
             dataBase.get(sourceWord).add(translation);  //add the translation
             FirebaseDBManager.updateDataBase(context,this);
-            Toast.makeText(context,"saved",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"Saved",Toast.LENGTH_SHORT).show();
         } else
-            Toast.makeText(context,"translation already exists",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"Translation already exists",Toast.LENGTH_SHORT).show();
     }
     public void removeWord(String word){
         dataBase.remove(word);

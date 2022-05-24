@@ -40,18 +40,18 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
     }
 
     private static final int MICROPHONE_CODE = 1;
-    Languages languages;
-    Spinner toSpinner, fromSpinner;
-    ArrayAdapter toAdaptor, fromAdaptor;
-    WordTranslator translator;
-    EditText input, additionalTranslation;
-    TextView translationTxt;
-    TextInputLayout additionalTranslationLayout;
-    Button saveBtn1, saveBtn2;
-    NetworkChangeReceiver networkReceiver;
-    Context context;
-    LinearLayout layout;
-    ProgressBar progressBar;
+    private Languages languages;
+    private Spinner toSpinner, fromSpinner;
+    private ArrayAdapter toAdaptor, fromAdaptor;
+    private WordTranslator translator;
+    private EditText input, additionalTranslation;
+    private TextView translationTxt;
+    private TextInputLayout additionalTranslationLayout;
+    private Button saveBtn1, saveBtn2;
+    private NetworkChangeReceiver networkReceiver;
+    private Context context;
+    private LinearLayout layout;
+    private ProgressBar progressBar;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -91,7 +91,7 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
 
     private void saveWord(TextView translation){
         if(saveBtn1.getTag().equals(R.color.red))
-            Toast.makeText(context,"no Internet",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"No Internet connection",Toast.LENGTH_SHORT).show();
         else {
             if (input.getText().toString().equals("")) {
                 input.setError("Enter a word");
@@ -99,7 +99,7 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
             }
             if (!languages.getToLanguage().equals(Utils.user.getNativeLanguage()) &&
                     !languages.getFromLanguage().equals(Utils.user.getNativeLanguage()))    //can't save without native language
-                Toast.makeText(context, "must include native language", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Must include native language", Toast.LENGTH_SHORT).show();
             else if (languages.getToLanguage().equals(Utils.user.getNativeLanguage()))
                 Utils.user.getVocabularyByLanguages(languages).addTranslation(input.getText().toString(), translation.getText().toString());
             else
@@ -119,7 +119,6 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
         if (requestCode == MICROPHONE_CODE){
             if(data != null) {
                 ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                //input.setText(result.get(0).split(" ", 2)[0]);
                 input.setText(result.get(0));
             }
         }
@@ -166,7 +165,7 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()){
             case R.id.translate_btn:
                 if(languages.getToLanguage().equals("To") || languages.getFromLanguage().equals("From"))
-                    Toast.makeText(context,"Select a language",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Select both languages",Toast.LENGTH_SHORT).show();
                 else if(languages.getToLanguage().equals(languages.getFromLanguage()))
                     Toast.makeText(context,"Select a different language",Toast.LENGTH_SHORT).show();
                 else if(input.getText().toString().equals("")) {
