@@ -2,8 +2,13 @@
     <string name="app_name">projectTranslator</string>
     <string name="display_translation_preview">Translation</string>
     <string name="shared_preference_name">mySharedPref</string>
+
     <string name="firebase_user_setting">usersSettings</string>
     <string name="firebase_user_words">usersWords</string>
     <string name="firebase_user_vocabulary_options">usersVocabularyOptions</string>
     <string name="firebase_user_native_language">native</string>
+
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
 </resources>

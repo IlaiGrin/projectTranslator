@@ -1,6 +1,8 @@
 package com.example.projecttranslator;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -18,7 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.HashMap;
+import java.util.Random;
 
 public class FirebaseDBManager {
 
@@ -27,7 +31,10 @@ public class FirebaseDBManager {
 
     public FirebaseDBManager(){}
 
-    public static void setUserEmail(String email){ userEmail = email.replace(".",""); }//remove "." because firebase do not allow "."
+    public static void setUserEmail(String email){  //remove "." because firebase do not allow "."
+        if(email != null)
+            userEmail = email.replace(".","");
+    }
 
     public static void deleteWord(Context context, String vocabularyKey, String word){
         reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabularyKey).child(word).removeValue();
@@ -129,6 +136,41 @@ public class FirebaseDBManager {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+    }
+
+    public static void readRandomWords(Context context, int numOfWords, String email, ArrayList<String> words, int appWidgetId){
+        Random rnd = new Random();
+        reference = FirebaseDatabase.getInstance().getReference();
+        setUserEmail(email);
+        int[] wordsArraySize = {numOfWords};
+        int[] totalWordsCounter = {0};
+        reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).orderByKey().keepSynced(true);
+        reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                while (words.size() < wordsArraySize[0]) {
+                    totalWordsCounter[0] = 0;
+                    for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+                        HashMap<String, ArrayList<String>> database = (HashMap<String, ArrayList<String>>)childDataSnapshot.getValue();
+                        totalWordsCounter[0] = totalWordsCounter[0] + database.size();
+                        if(rnd.nextBoolean() && words.size() < numOfWords) {    //random vocabulary
+                            //get a random key = word
+                            String randomWord = database.keySet().toArray()[rnd.nextInt(database.size())].toString();
+                            if(!words.contains(randomWord))
+                                words.add(randomWord);
+                        }
+                    }
+                    if(totalWordsCounter[0] < wordsArraySize[0])    //to little words
+                        wordsArraySize[0] = totalWordsCounter[0];
+                }
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.daily_words_stack_view);  //trigger onDataSetChanged in WidgetItemFactory
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
             }
         });
     }

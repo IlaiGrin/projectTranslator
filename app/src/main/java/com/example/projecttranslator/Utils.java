@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Size;
@@ -14,21 +15,27 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class Utils {
     public static  User user;
-    public static Random rnd = new Random();
     public static SharedPreferences sp;
+    public static File file;
 
     public static void putStringInSP(Context context, String key, String value){
-        sp = context.getSharedPreferences(context.getString(R.string.shared_preference_name), Context.MODE_PRIVATE);
+        sp = context.getApplicationContext().getSharedPreferences(context.getString(R.string.shared_preference_name), Context.MODE_PRIVATE);
         sp.edit().putString(key, value).commit();
     }
     public static String getStringFromSP(Context context, String key){
-        sp = context.getSharedPreferences(context.getString(R.string.shared_preference_name), Context.MODE_PRIVATE);
+        sp = context.getApplicationContext().getSharedPreferences(context.getString(R.string.shared_preference_name), Context.MODE_PRIVATE);
         return sp.getString(key, "");
     }
 
@@ -40,8 +47,7 @@ public class Utils {
         return pixels;
     }
 
-    public static Size getScreenSize(Context context)
-    {
+    public static Size getScreenSize(Context context) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         return new Size(displayMetrics.widthPixels, displayMetrics.heightPixels);

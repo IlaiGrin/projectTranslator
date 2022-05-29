@@ -24,10 +24,12 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Rational;
 import android.util.Size;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,9 +66,6 @@ public class CameraActivity extends AppCompatActivity {
         display = findViewById(R.id.display_txt);
 
         recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
-        // Request camera permissions
-        String[] permissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        requestPermissions(permissions, 1);
 
         imageAnalysis = new ImageAnalysis.Builder()
                         .setTargetResolution(new Size(1280, 720))
@@ -78,9 +77,9 @@ public class CameraActivity extends AppCompatActivity {
                 @SuppressLint("UnsafeOptInUsageError") Image mediaImage = imageProxy.getImage();
                 if(mediaImage != null){
                     InputImage image =
-                            InputImage.fromMediaImage(mediaImage, imageProxy.getImageInfo().getRotationDegrees());
+                            InputImage.fromBitmap(cropImage(mediaImage, 0,0,100,100), imageProxy.getImageInfo().getRotationDegrees());
                     recognizer.process(image).addOnSuccessListener(visionText -> {
-                        Toast.makeText(this, "analysis succeeded", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Analysis succeeded", Toast.LENGTH_SHORT).show();
                         display.setText(visionText.getText()+"");
                     }).addOnCompleteListener(complete->{ mediaImage.close();imageProxy.close();})
                             .addOnFailureListener(e ->Log.d("debug1", e+""));
@@ -96,19 +95,6 @@ public class CameraActivity extends AppCompatActivity {
             startActivity(returnIntent);
         });
     }
-    @RequiresApi(api = Build.VERSION_CODES.R)
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_GRANTED) {
-                    startCamera();
-                } else
-                    Toast.makeText(this, "Permissions not granted", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     private void startCamera(){
@@ -118,7 +104,7 @@ public class CameraActivity extends AppCompatActivity {
                 cameraProvider = cameraProviderFuture.get();
                 bindPreview();
             } catch (ExecutionException | InterruptedException e) {
-                Toast.makeText(this,"binding failed",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Binding failed",Toast.LENGTH_SHORT).show();
             }
         }, ContextCompat.getMainExecutor(this));
     }
@@ -178,12 +164,13 @@ public class CameraActivity extends AppCompatActivity {
                 selectedBitmap = extras.getParcelable("data");       // get the cropped bitmap
                 InputImage image = InputImage.fromBitmap(selectedBitmap, 2);
                 recognizer.process(image).addOnSuccessListener(visionText -> {
-                    Toast.makeText(this, "analysis succeeded", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Analysis succeeded", Toast.LENGTH_SHORT).show();
                     display.setText(visionText.getText() + "");
                 });
             }
         }
     }
+
     private Bitmap cropImage(Image image, int xOffset, int yOffset, int cropWidth, int cropHeight) {
         //Convert image to Bitmap
         ByteBuffer buffer = image.getPlanes()[0].getBuffer();

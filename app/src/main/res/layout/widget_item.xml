@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_item_text"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:gravity="center"
+    android:textSize="25dp"
+    android:background="@drawable/app_widget_background"
+    android:text="item"
+    android:textColor="@color/black"/>

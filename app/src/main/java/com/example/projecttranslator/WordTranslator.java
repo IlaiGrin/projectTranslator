@@ -22,12 +22,13 @@ import com.google.mlkit.nl.translate.TranslatorOptions;
 import com.google.mlkit.nl.translate.Translator;
 
 public class WordTranslator {
-    Translator translator;
-    Context context;
-    EditText source;
-    TextView display;
-    ProgressBar downloadModelBar;
-    LinearLayout layout;
+    private Translator translator;
+    private TranslatorOptions options;
+    private Context context;
+    private EditText source;
+    private TextView display;
+    private ProgressBar downloadModelBar;
+    private LinearLayout layout;
 
     public WordTranslator(Context context, EditText source, TextView display, ProgressBar downloadModelBar, LinearLayout layout){
         this.context = context;
@@ -39,7 +40,7 @@ public class WordTranslator {
     public void translate(String fromLanguageCode, String toLanguageCode){
         Utils.setProgressBar(layout, downloadModelBar, true);
         // creating firebase translate option
-        TranslatorOptions options = new TranslatorOptions.Builder()
+        options = new TranslatorOptions.Builder()
                         .setSourceLanguage(fromLanguageCode)
                         .setTargetLanguage(toLanguageCode).build();
         translator = Translation.getClient(options);
@@ -50,7 +51,7 @@ public class WordTranslator {
         //download the modal which we will require to translate
         DownloadConditions conditions = new DownloadConditions.Builder().requireWifi().build();
         translator.downloadModelIfNeeded(conditions).addOnSuccessListener(aVoid ->{
-            Toast.makeText(context, "language modal is downloaded", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Language modal is downloaded", Toast.LENGTH_SHORT).show();
             // calling method to translate text
             translator.translate(input).addOnSuccessListener(translation-> display.setText(translation));
         }).addOnFailureListener(exception -> Toast.makeText(context, "Fail to download modal", Toast.LENGTH_SHORT).show())

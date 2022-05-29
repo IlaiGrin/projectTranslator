@@ -44,7 +44,6 @@ public class ProfileFragment extends Fragment {
     ArrayAdapter adaptor;
     Context context;
     boolean isSpinnerBuilt;
-    Dialog dialog;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -58,7 +57,7 @@ public class ProfileFragment extends Fragment {
         spinner = getView().findViewById(R.id.select_native_language_spinner);
         FirebaseDBManager.setUserEmail(Utils.user.getEmail());
         isSpinnerBuilt = false;
-        initializeSpinner();
+        initializeNativeSpinner();
 
         if(Utils.user.getUsername() == null)
             usernameDisplay.setText("Username: ");
@@ -80,13 +79,14 @@ public class ProfileFragment extends Fragment {
 
         getView().findViewById(R.id.log_out_btn).setOnClickListener(view1 -> {
             FirebaseAuth.getInstance().signOut();
+            Utils.putStringInSP(context, "user_email","");
             startActivity(new Intent(getContext(), LogInActivity.class));
         });
 
         getView().findViewById(R.id.native_language_info_img).setOnClickListener(view1 -> Utils.nativeLanguageDialog(getContext()));
     }
 
-    private void initializeSpinner(){
+    private void initializeNativeSpinner(){
         //initialize the native language spinner
         spinner = getView().findViewById(R.id.select_native_language_spinner);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
