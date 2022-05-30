@@ -2,16 +2,10 @@ package com.example.projecttranslator;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
-
-import java.security.Provider;
-import java.util.ArrayList;
 
 public class DailyWordWorker extends Worker {
 

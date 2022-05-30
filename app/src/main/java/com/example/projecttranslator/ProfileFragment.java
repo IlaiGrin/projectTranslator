@@ -1,12 +1,11 @@
 package com.example.projecttranslator;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.service.autofill.UserData;
-import android.util.Size;
-import android.view.ContentInfo;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +17,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
-import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.auth.internal.zzt;
 
 public class ProfileFragment extends Fragment {
 
@@ -37,20 +31,20 @@ public class ProfileFragment extends Fragment {
         return inflater.inflate(R.layout.profile_fragment, container, false);
     }
 
-    EditText usernameEditText;
-    TextView usernameDisplay;
-    TextInputLayout usernameLayout;
-    Spinner spinner;
-    ArrayAdapter adaptor;
-    Context context;
-    boolean isSpinnerBuilt;
+    private EditText usernameEditText;
+    private TextView usernameDisplay;
+    private TextInputLayout usernameLayout;
+    private Spinner spinner;
+    private ArrayAdapter adaptor;
+    private Context context;
+    private NetworkChangeReceiver networkReceiver;
+    private boolean isSpinnerBuilt;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         context = getContext();
-        Utils.user = new User(context);
         usernameEditText = getView().findViewById(R.id.username_edit_txt);
         usernameLayout = getView().findViewById(R.id.username_edit_txt_layout);
         usernameDisplay = getView().findViewById(R.id.username_display);
@@ -58,6 +52,10 @@ public class ProfileFragment extends Fragment {
         FirebaseDBManager.setUserEmail(Utils.user.getEmail());
         isSpinnerBuilt = false;
         initializeNativeSpinner();
+
+        //follow network state - mic is unavailable without connection
+        networkReceiver = new NetworkChangeReceiver(spinner);
+        context.registerReceiver(networkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         if(Utils.user.getUsername() == null)
             usernameDisplay.setText("Username: ");
@@ -109,5 +107,11 @@ public class ProfileFragment extends Fragment {
             spinner.setSelection(adaptor.getPosition(Utils.user.getNativeLanguage()));
             spinner.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        context.unregisterReceiver(networkReceiver);
     }
 }

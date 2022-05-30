@@ -1,8 +1,6 @@
 package com.example.projecttranslator;
 
 import android.content.Context;
-import android.renderscript.ScriptIntrinsicYuvToRGB;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;

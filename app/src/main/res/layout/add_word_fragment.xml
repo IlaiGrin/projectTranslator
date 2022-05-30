@@ -159,15 +159,6 @@
         android:elevation="10dp"
         android:background="@drawable/round_background" />
 
-    <ImageView
-        android:id="@+id/camera_img"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:src="@drawable/camera_icon"
-        android:background="@drawable/round_background"
-        android:elevation="10dp"
-        android:layout_marginLeft="5dp" />
-
 </LinearLayout>
 
     <ProgressBar

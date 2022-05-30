@@ -10,11 +10,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 
 public class VocabularyWordsAdapter extends ArrayAdapter {
 
@@ -51,7 +50,12 @@ public class VocabularyWordsAdapter extends ArrayAdapter {
             numOfTranslations.setText(dataBase.get(sourceWords.get(position)).size() + "");
             initializeTranslationsSpinner(view.findViewById(R.id.translations_spinner), dataBase.get(sourceWords.get(position)));
 
-            view.findViewById(R.id.delete_word_img).setOnClickListener(view1 -> alertDialog(position));
+            view.findViewById(R.id.delete_word_img).setOnClickListener(view1 ->{
+                if(NetworkChangeReceiver.isOnline(context))
+                    alertDialog(position);
+                else
+                    Toast.makeText(context,"No Internet connection",Toast.LENGTH_SHORT).show();
+            });
             return view;
         }
         convertView.setVisibility(View.GONE);

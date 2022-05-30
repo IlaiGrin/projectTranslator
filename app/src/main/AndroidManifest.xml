@@ -40,10 +40,7 @@
             android:name=".LogInActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".CameraActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" /> <!-- automatically download the ML model -->
+        <!-- automatically download the ML model -->
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="ocr" />

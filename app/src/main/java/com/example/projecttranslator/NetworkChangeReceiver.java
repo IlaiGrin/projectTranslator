@@ -3,33 +3,42 @@ package com.example.projecttranslator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
 
     ImageView micBtn;
     Button save1, save2;
+    Spinner nativeSpinner;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         try {
             if (!isOnline(context)) {
-                micBtn.setBackground(context.getDrawable(R.drawable.red_btn));
-                micBtn.setTag(R.drawable.red_btn);
-                save1.setBackgroundColor(context.getColor(R.color.red));
-                save1.setTag(R.color.red);
-                save2.setBackgroundColor(context.getColor(R.color.red));
+                if(micBtn == null)
+                    nativeSpinner.setEnabled(false);
+                else {
+                    micBtn.setBackground(context.getDrawable(R.drawable.red_btn));
+                    micBtn.setTag(R.drawable.red_btn);
+                    save1.setBackgroundColor(context.getColor(R.color.red));
+                    save1.setTag(R.color.red);
+                    save2.setBackgroundColor(context.getColor(R.color.red));
+                }
             }
             else {
-                micBtn.setBackground(context.getDrawable(R.drawable.round_background));
-                micBtn.setTag(R.drawable.round_background);
-                save1.setBackgroundColor(context.getColor(R.color.teal_200));
-                save1.setTag("");
-                save2.setBackgroundColor(context.getColor(R.color.teal_200));
+                if(micBtn == null)
+                    nativeSpinner.setEnabled(true);
+                else {
+                    micBtn.setBackground(context.getDrawable(R.drawable.round_background));
+                    micBtn.setTag(R.drawable.round_background);
+                    save1.setBackgroundColor(context.getColor(R.color.teal_200));
+                    save1.setTag("");
+                    save2.setBackgroundColor(context.getColor(R.color.teal_200));
+                }
             }
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -42,7 +51,11 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         this.save2 = save2;
     }
 
-    private boolean isOnline(Context context) {
+    public NetworkChangeReceiver(Spinner nativeSpinner){
+        this.nativeSpinner = nativeSpinner;
+    }
+
+    public static boolean isOnline(Context context) {
         try {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = cm.getActiveNetworkInfo();

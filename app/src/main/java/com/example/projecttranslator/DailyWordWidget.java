@@ -1,6 +1,5 @@
 package com.example.projecttranslator;
 
-import android.annotation.SuppressLint;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -12,8 +11,6 @@ import android.widget.RemoteViews;
  * Implementation of App Widget functionality.
  */
 public class DailyWordWidget extends AppWidgetProvider {
-
-    public static final String ACTION_REFRESH = "actionRefresh";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -40,16 +37,5 @@ public class DailyWordWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
-    }
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-
-        if(ACTION_REFRESH.equals(intent.getAction())){
-            int widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            appWidgetManager.notifyAppWidgetViewDataChanged(widgetId, R.id.daily_words_stack_view);  //trigger onDataSetChanged in WidgetItemFactory
-        }
-        super.onReceive(context, intent);
     }
 }

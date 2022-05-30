@@ -7,11 +7,9 @@ import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +70,6 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
         progressBar = getView().findViewById(R.id.progress_bar);
         translator = new WordTranslator(context, input, translationTxt, progressBar, layout);
 
-        Log.d("debug1", "empty "+Utils.user.getDictionary().isEmpty());
         if(Utils.user.getDictionary().isEmpty() || Utils.user.getDictionary().get(0).getDataBase().isEmpty())   //if user has no DB or only read options
             FirebaseDBManager.readVocabularyDBs(context, layout, progressBar);
 
@@ -83,8 +80,6 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
         getView().findViewById(R.id.translate_btn).setOnClickListener(this);
 
         getView().findViewById(R.id.mic_img).setOnClickListener(this);
-
-        getView().findViewById(R.id.camera_img).setOnClickListener(this);
 
         getView().findViewById(R.id.switch_languages_img).setOnClickListener(this);
     }
@@ -130,13 +125,13 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
         toSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                languages.setToLanguage(languages.getToLanguagesArray()[i]);
-                Utils.putStringInSP(context, "to_language", languages.getToLanguagesArray()[i]);
+                languages.setToLanguage(Languages.getToLanguagesArray()[i]);
+                Utils.putStringInSP(context, "to_language", Languages.getToLanguagesArray()[i]);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) { }
         });
-        toAdaptor = new ArrayAdapter(context, R.layout.spinner_item, languages.getToLanguagesArray());
+        toAdaptor = new ArrayAdapter(context, R.layout.spinner_item, Languages.getToLanguagesArray());
         toAdaptor.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         toSpinner.setAdapter(toAdaptor);
         if(!languages.getToLanguage().equals(""))
@@ -147,13 +142,13 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
         fromSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                languages.setFromLanguage(languages.getFromLanguagesArray()[i]);
-                Utils.putStringInSP(context, "from_language", languages.getToLanguagesArray()[i]);
+                languages.setFromLanguage(Languages.getFromLanguagesArray()[i]);
+                Utils.putStringInSP(context, "from_language", Languages.getToLanguagesArray()[i]);
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) { }
         });
-        fromAdaptor = new ArrayAdapter(context, R.layout.spinner_item,  languages.getFromLanguagesArray());
+        fromAdaptor = new ArrayAdapter(context, R.layout.spinner_item,  Languages.getFromLanguagesArray());
         fromAdaptor.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         fromSpinner.setAdapter(fromAdaptor);
         if(!languages.getToLanguage().equals(""))
@@ -224,9 +219,6 @@ public class AddWordFragment extends Fragment implements View.OnClickListener {
                     languages.setFromLanguage(languages.getToLanguage());
                     languages.setToLanguage(tempFromLanguage);
                 }break;
-            case R.id.camera_img:
-                startActivity(new Intent(context, CameraActivity.class));
-                break;
         }
     }
 }

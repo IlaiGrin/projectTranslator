@@ -40,7 +40,7 @@ FirebaseAuth firebaseAuth;
                             firebaseAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                                     .addOnFailureListener(e -> Toast.makeText(this, e.getMessage()+"", Toast.LENGTH_LONG).show())
                                     .addOnSuccessListener(authResult2 ->{
-                                        Utils.user = new User(this);
+                                        Utils.user = new User(getApplicationContext());
                                         FirebaseDBManager.setUserEmail(Utils.user.getEmail());
                                         Utils.user.updateUsername(username.getText().toString());   //add username
                                         Utils.user.setNativeLanguage(nativeLanguage);

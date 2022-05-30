@@ -3,17 +3,15 @@ package com.example.projecttranslator;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import androidx.work.Constraints;
-import androidx.work.Data;
-import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 public class WidgetItemFactory implements RemoteViewsService.RemoteViewsFactory {   //similar to an adopter for widget
@@ -30,12 +28,17 @@ public class WidgetItemFactory implements RemoteViewsService.RemoteViewsFactory 
                 AppWidgetManager.INVALID_APPWIDGET_ID);
 
         email = Utils.getStringFromSP(context, "user_email");
-        if(!email.equals("")){
+        if(!email.equals(""))
             FirebaseDBManager.readRandomWords(context, 3,email, data, widgetId);
-        }
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 23);
+        c.set(Calendar.MINUTE, 59);
+        c.set(Calendar.SECOND, 59);
+        c.set(Calendar.MILLISECOND, 0);
+        long howMany = (c.getTimeInMillis()-System.currentTimeMillis());
         //set worker
         PeriodicWorkRequest updateWordsWorker = new PeriodicWorkRequest.Builder(DailyWordWorker.class, 24, TimeUnit.HOURS)
-                .setInitialDelay(10, TimeUnit.SECONDS)
+                .setInitialDelay(howMany, TimeUnit.MILLISECONDS)
                 .setConstraints(Constraints.NONE)
                 .addTag(widgetId+"")
                 .build();
@@ -45,12 +48,11 @@ public class WidgetItemFactory implements RemoteViewsService.RemoteViewsFactory 
     @Override
     public void onCreate() {
         //connect to data source
-
     }
 
     @Override
     public void onDataSetChanged() {
-        if (Utils.getStringFromSP(context, "from_worker").equals("true")){
+        if (Utils.getStringFromSP(context, "from_worker").equals("true") && !email.equals("")){
             data.clear();
             FirebaseDBManager.readRandomWords(context, 3,email, data, widgetId);
         }

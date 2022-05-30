@@ -1,18 +1,9 @@
 package com.example.projecttranslator;
 
 import android.content.Context;
-import android.content.Intent;
-import android.renderscript.ScriptIntrinsicYuvToRGB;
-import android.speech.RecognizerIntent;
-import android.speech.RecognizerResultsIntent;
-import android.text.Layout;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 

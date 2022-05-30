@@ -2,7 +2,6 @@ package com.example.projecttranslator;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -20,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -37,28 +35,34 @@ public class FirebaseDBManager {
     }
 
     public static void deleteWord(Context context, String vocabularyKey, String word){
-        reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabularyKey).child(word).removeValue();
+        if(NetworkChangeReceiver.isOnline(context))
+            reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabularyKey).child(word).removeValue();
     }
 
     public static void deleteVocabularyOption(Context context, String vocabularyKey){
-        reference.child(context.getString(R.string.firebase_user_vocabulary_options)).child(userEmail).child(vocabularyKey).removeValue();
+        if(NetworkChangeReceiver.isOnline(context))
+            reference.child(context.getString(R.string.firebase_user_vocabulary_options)).child(userEmail).child(vocabularyKey).removeValue();
     }
 
     //writers
     public static void addUser(Context context){
-        //inserting user's settings
-        reference.child(context.getString(R.string.firebase_user_setting)).child(userEmail).child(context.getString(R.string.firebase_user_native_language)).setValue(Utils.user.getNativeLanguage());
-        for (VocabularyDB vocabulary : Utils.user.getDictionary()) {
-            //inserting every vocabulary option in DB
-            vocabulary.setKey(reference.child(context.getString(R.string.firebase_user_vocabulary_options)).child(userEmail).push().getKey());    //each vocabulary has a unique key
-            reference.child(context.getString(R.string.firebase_user_vocabulary_options)).child(userEmail).child(vocabulary.getKey()).setValue(vocabulary.getLanguages());
-            //inserting the words in vocabulary
-            reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabulary.getKey()).setValue(vocabulary.getDataBase());
+        if(NetworkChangeReceiver.isOnline(context)){
+            //inserting user's settings
+            reference.child(context.getString(R.string.firebase_user_setting)).child(userEmail).child(context.getString(R.string.firebase_user_native_language)).setValue(Utils.user.getNativeLanguage());
+            for (VocabularyDB vocabulary : Utils.user.getDictionary()) {
+                //inserting every vocabulary option in DB
+                vocabulary.setKey(reference.child(context.getString(R.string.firebase_user_vocabulary_options)).child(userEmail).push().getKey());    //each vocabulary has a unique key
+                reference.child(context.getString(R.string.firebase_user_vocabulary_options)).child(userEmail).child(vocabulary.getKey()).setValue(vocabulary.getLanguages());
+                //inserting the words in vocabulary
+                reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabulary.getKey()).setValue(vocabulary.getDataBase());
+            }
         }
     }
 
     //updates words in DB
-    public static void updateDataBase(Context context, VocabularyDB vocabulary){  reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabulary.getKey()).setValue(vocabulary.getDataBase());}
+    public static void updateDataBase(Context context, VocabularyDB vocabulary){    //save btns are disable so user can't call this without internet
+        reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabulary.getKey()).setValue(vocabulary.getDataBase());
+    }
 
     public static void addVocabularyDB(Context context, VocabularyDB vocabulary){
         //inserting vocabulary's languages in DB
@@ -73,120 +77,132 @@ public class FirebaseDBManager {
 
     //readers
     public static void readVocabularyDBs(Context context, LinearLayout layout, ProgressBar progressBar){
-        Utils.setProgressBar(layout, progressBar, true);
-        //read options
-        reference.child(context.getString(R.string.firebase_user_vocabulary_options)).child(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
-                    VocabularyDB vocabulary = new VocabularyDB(childDataSnapshot.getValue(Languages.class), context);
-                    vocabulary.setKey(childDataSnapshot.getKey());
-                    if(Utils.user.getVocabularyByKey(vocabulary.getKey()) == null)  //if the DB isn't saved already in user
-                        Utils.user.addVocabularyDB(vocabulary);
+        if(NetworkChangeReceiver.isOnline(context)){
+            Utils.setProgressBar(layout, progressBar, true);
+            //read options
+            reference.child(context.getString(R.string.firebase_user_vocabulary_options)).child(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+                        VocabularyDB vocabulary = new VocabularyDB(childDataSnapshot.getValue(Languages.class), context);
+                        vocabulary.setKey(childDataSnapshot.getKey());
+                        if(Utils.user.getVocabularyByKey(vocabulary.getKey()) == null)  //if the DB isn't saved already in user
+                            Utils.user.addVocabularyDB(vocabulary);
+                    }
+                    readWords(context, layout, progressBar);
                 }
-                readWords(context, layout, progressBar);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) { }
+            });
+        }
     }
 
     public static void readWords(Context context, LinearLayout layout, ProgressBar progressBar){
-        //read words
-        reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
-                    Utils.user.getVocabularyByKey(childDataSnapshot.getKey()).setDataBase((HashMap<String, ArrayList<String>>) childDataSnapshot.getValue());
+        if(NetworkChangeReceiver.isOnline(context)){
+            //read words
+            reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+                        Utils.user.getVocabularyByKey(childDataSnapshot.getKey()).setDataBase((HashMap<String, ArrayList<String>>) childDataSnapshot.getValue());
+                    }
+                    Utils.setProgressBar(layout, progressBar, false);
                 }
-                Utils.setProgressBar(layout, progressBar, false);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) { }
+            });
+        }
     }
 
     public static void readOnlyVocabularyOptions(Context context){
-        //read options
-        reference.child(context.getString(R.string.firebase_user_vocabulary_options)).child(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
-                    VocabularyDB vocabulary = new VocabularyDB(childDataSnapshot.getValue(Languages.class), context);
-                    vocabulary.setKey(childDataSnapshot.getKey());
-                    if(Utils.user.getVocabularyByKey(vocabulary.getKey()) == null)  //if the DB isn't saved already in user
-                        Utils.user.addVocabularyDB(vocabulary);
+        if(NetworkChangeReceiver.isOnline(context)){
+            //read options
+            reference.child(context.getString(R.string.firebase_user_vocabulary_options)).child(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+                        VocabularyDB vocabulary = new VocabularyDB(childDataSnapshot.getValue(Languages.class), context);
+                        vocabulary.setKey(childDataSnapshot.getKey());
+                        if(Utils.user.getVocabularyByKey(vocabulary.getKey()) == null)  //if the DB isn't saved already in user
+                            Utils.user.addVocabularyDB(vocabulary);
+                    }
+                    VocabularyFragment.displayVocabularyOptions(context, Utils.user.getDictionary());
                 }
-                VocabularyFragment.displayVocabularyOptions(context, Utils.user.getDictionary());
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) { }
+            });
+        }
     }
 
     public static void readWordsFromVocabulary(Context context, VocabularyDB vocabularyDB, ListView listView, TextView title){
-        reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabularyDB.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                vocabularyDB.setDataBase((HashMap<String, ArrayList<String>>) snapshot.getValue());
-                title.setText(vocabularyDB.getDataBase().size()+" Words");
-                listView.setAdapter(new VocabularyWordsAdapter(context, 0,0, vocabularyDB.getDataBase(), vocabularyDB.getKey(), title));
-            }
+        if(NetworkChangeReceiver.isOnline(context)){
+            reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabularyDB.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    vocabularyDB.setDataBase((HashMap<String, ArrayList<String>>) snapshot.getValue());
+                    title.setText(vocabularyDB.getDataBase().size()+" Words");
+                    listView.setAdapter(new VocabularyWordsAdapter(context, 0,0, vocabularyDB.getDataBase(), vocabularyDB.getKey(), title));
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
     public static void readRandomWords(Context context, int numOfWords, String email, ArrayList<String> words, int appWidgetId){
-        Random rnd = new Random();
-        reference = FirebaseDatabase.getInstance().getReference();
-        setUserEmail(email);
-        int[] wordsArraySize = {numOfWords};
-        int[] totalWordsCounter = {0};
-        reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).orderByKey().keepSynced(true);
-        reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                while (words.size() < wordsArraySize[0]) {
-                    totalWordsCounter[0] = 0;
-                    for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
-                        HashMap<String, ArrayList<String>> database = (HashMap<String, ArrayList<String>>)childDataSnapshot.getValue();
-                        totalWordsCounter[0] = totalWordsCounter[0] + database.size();
-                        if(rnd.nextBoolean() && words.size() < numOfWords) {    //random vocabulary
-                            //get a random key = word
-                            String randomWord = database.keySet().toArray()[rnd.nextInt(database.size())].toString();
-                            if(!words.contains(randomWord))
-                                words.add(randomWord);
+        if(NetworkChangeReceiver.isOnline(context)){
+            Random rnd = new Random();
+            reference = FirebaseDatabase.getInstance().getReference();
+            setUserEmail(email);
+            int[] wordsArraySize = {numOfWords};
+            int[] totalWordsCounter = {0};
+            reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).orderByKey().keepSynced(true);
+            reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    while (words.size() < wordsArraySize[0]) {
+                        totalWordsCounter[0] = 0;
+                        for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
+                            HashMap<String, ArrayList<String>> database = (HashMap<String, ArrayList<String>>)childDataSnapshot.getValue();
+                            totalWordsCounter[0] = totalWordsCounter[0] + database.size();
+                            if(rnd.nextBoolean() && words.size() < numOfWords) {    //random vocabulary
+                                //get a random key = word
+                                String randomWord = database.keySet().toArray()[rnd.nextInt(database.size())].toString();
+                                if(!words.contains(randomWord))
+                                    words.add(randomWord);
+                            }
                         }
+                        if(totalWordsCounter[0] < wordsArraySize[0])    //to little words
+                            wordsArraySize[0] = totalWordsCounter[0];
                     }
-                    if(totalWordsCounter[0] < wordsArraySize[0])    //to little words
-                        wordsArraySize[0] = totalWordsCounter[0];
+                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.daily_words_stack_view);  //trigger onDataSetChanged in WidgetItemFactory
                 }
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.daily_words_stack_view);  //trigger onDataSetChanged in WidgetItemFactory
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
     }
 
     public static void getNativeLanguageFormDB(Context context, Spinner spinner, ArrayAdapter adapter){
-        reference.child(context.getString(R.string.firebase_user_setting)).child(userEmail).child(context.getString(R.string.firebase_user_native_language)).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String nativeLan = snapshot.getValue(String.class);
-                Utils.user.setNativeLanguage(nativeLan);
-                spinner.setSelection(adapter.getPosition(nativeLan));
-                spinner.setVisibility(View.VISIBLE);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
+        if(NetworkChangeReceiver.isOnline(context)){
+            reference.child(context.getString(R.string.firebase_user_setting)).child(userEmail).child(context.getString(R.string.firebase_user_native_language)).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String nativeLan = snapshot.getValue(String.class);
+                    Utils.user.setNativeLanguage(nativeLan);
+                    spinner.setSelection(adapter.getPosition(nativeLan));
+                    spinner.setVisibility(View.VISIBLE);
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) { }
+            });
+        }
     }
     /*
     usersSettings{

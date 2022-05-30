@@ -1,28 +1,16 @@
 package com.example.projecttranslator;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 BottomNavigationView navigationView;
@@ -34,7 +22,7 @@ Context context;
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-        Utils.user = new User(this);
+        Utils.user = new User(getApplicationContext());
         context = this;
         Utils.putStringInSP(context, "current_fragment", "3");
         if(!Utils.user.isLoggedIn())
@@ -43,10 +31,6 @@ Context context;
             getSupportFragmentManager().beginTransaction().replace(R.id.container, new ProfileFragment()).commit();     //start with profile fragment
         navigationView = findViewById(R.id.bottomNavBar);
         navigationView.setOnNavigationItemSelectedListener(bottomNavSelection);
-
-        // Request permissions
-        String[] permissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-        requestPermissions(permissions, 1);
 
         if(getIntent() != null && getIntent().getBooleanExtra("open_translator", false))    //when returning from camera
             navigationView.findViewById(R.id.translator).callOnClick();
@@ -104,20 +88,4 @@ Context context;
                 .commit();
         return true;
     };
-
-    @RequiresApi(api = Build.VERSION_CODES.R)
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(permissions[1]) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(permissions[2]) == PackageManager.PERMISSION_GRANTED) {
-
-                } else {
-                    Toast.makeText(this, "Permissions not granted", Toast.LENGTH_SHORT).show();
-                    requestPermissions(permissions, 1);
-                }
-            }
-        }
-    }
 }

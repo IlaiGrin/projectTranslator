@@ -1,17 +1,7 @@
 package com.example.projecttranslator;
 
-import android.icu.lang.UProperty;
-import android.util.Log;
-
-import androidx.annotation.Nullable;
-
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage;
-import com.google.firebase.ml.naturallanguage.languageid.FirebaseLanguageIdentification;
 import com.google.mlkit.nl.translate.TranslateLanguage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Languages {
 
@@ -24,7 +14,6 @@ public class Languages {
     public Languages(String fromLanguage, String toLanguage){
         this.fromLanguage = fromLanguage;
         this.toLanguage = toLanguage;
-        //identifier = FirebaseNaturalLanguage.getInstance().getLanguageIdentification();
     }
 
     public Languages(){}
@@ -53,18 +42,4 @@ public class Languages {
         }
         return "";
     }
-
-
-
-    /*public String identifyLanguageCode(String input){
-        final String[] languageCode = {""};
-        identifier.identifyLanguage(input).addOnSuccessListener(new OnSuccessListener<String>() {
-            @Override
-            public void onSuccess(@Nullable String code) {
-                if (code != "und")
-                    languageCode[0] = code;
-            }
-        });
-        return languageCode[0];
-    }*/
 }
