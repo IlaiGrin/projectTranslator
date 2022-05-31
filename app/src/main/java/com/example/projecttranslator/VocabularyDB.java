@@ -51,6 +51,16 @@ public class VocabularyDB {
         } else
             Toast.makeText(context,"Translation already exists",Toast.LENGTH_SHORT).show();
     }
+
+    public HashMap<String, ArrayList<String>> orderVocabularyByString(String wordToOrderBy){
+        HashMap<String, ArrayList<String>> orderedDB = new HashMap<>();
+        for (Object word:dataBase.keySet().toArray()) {
+            if(word.toString().contains(wordToOrderBy))
+                orderedDB.put(word.toString(), dataBase.get(word.toString()));  //add word if contains the wanted string
+        }
+        return orderedDB;
+    }
+
     public void removeWord(String word){
         dataBase.remove(word);
     }

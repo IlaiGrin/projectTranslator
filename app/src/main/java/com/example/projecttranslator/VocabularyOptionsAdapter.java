@@ -38,9 +38,8 @@ public class VocabularyOptionsAdapter extends ArrayAdapter {
 
         view.setOnClickListener(view1 ->{
             VocabularyDB vocabularyDB = objects.get(position);
-            if(Utils.user.getVocabularyByKey(vocabularyDB.getKey()) != null){
-                title.setText(vocabularyDB.getDataBase().size()+" Words");
-                listView.setAdapter(new VocabularyWordsAdapter(context, 0,0, vocabularyDB.getDataBase(), vocabularyDB.getKey(), title));
+            if(Utils.user.getVocabularyByKey(vocabularyDB.getKey()).getDataBase().size() != 0){
+                VocabularyFragment.displayVocabularyWords(context, vocabularyDB);
             } else
                 FirebaseDBManager.readWordsFromVocabulary(context, vocabularyDB, listView, title);
         });

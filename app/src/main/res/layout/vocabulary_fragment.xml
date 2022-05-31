@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <TextView
@@ -14,10 +15,30 @@
         android:textSize="40dp"
         android:layout_gravity="center"/>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_edit_txt_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:endIconMode="custom"
+        app:layout_constraintBottom_toTopOf="@+id/log_out_btn"
+        app:startIconDrawable="@drawable/ic_search"
+        android:visibility="gone"
+        android:layout_gravity="center">
+
+        <EditText
+            android:id="@+id/search_edit_txt"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:visibility="gone" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="5dp"/>
 
 </LinearLayout>

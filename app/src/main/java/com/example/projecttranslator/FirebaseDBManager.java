@@ -140,8 +140,7 @@ public class FirebaseDBManager {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     vocabularyDB.setDataBase((HashMap<String, ArrayList<String>>) snapshot.getValue());
-                    title.setText(vocabularyDB.getDataBase().size()+" Words");
-                    listView.setAdapter(new VocabularyWordsAdapter(context, 0,0, vocabularyDB.getDataBase(), vocabularyDB.getKey(), title));
+                    VocabularyFragment.displayVocabularyWords(context, vocabularyDB);
                 }
 
                 @Override
