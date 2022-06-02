@@ -29,7 +29,7 @@ public class WidgetItemFactory implements RemoteViewsService.RemoteViewsFactory 
 
         email = Utils.getStringFromSP(context, "user_email");
         if(!email.equals(""))
-            FirebaseDBManager.readRandomWords(context, 3,email, data, widgetId);
+            FirebaseDBManager.readRandomWords(context, Integer.parseInt(Utils.getStringFromSP(context,"number_of_cards")),email, data, widgetId);
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, 23);
         c.set(Calendar.MINUTE, 59);
@@ -54,7 +54,7 @@ public class WidgetItemFactory implements RemoteViewsService.RemoteViewsFactory 
     public void onDataSetChanged() {
         if (Utils.getStringFromSP(context, "from_worker").equals("true") && !email.equals("")){
             data.clear();
-            FirebaseDBManager.readRandomWords(context, 3,email, data, widgetId);
+            FirebaseDBManager.readRandomWords(context, Integer.parseInt(Utils.getStringFromSP(context,"number_of_cards")),email, data, widgetId);
         }
         Utils.putStringInSP(context, "from_worker","false");
     }

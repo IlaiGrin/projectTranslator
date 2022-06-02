@@ -2,11 +2,13 @@ package com.example.projecttranslator;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -188,7 +190,7 @@ public class FirebaseDBManager {
         }
     }
 
-    public static void getNativeLanguageFormDB(Context context, Spinner spinner, ArrayAdapter adapter){
+    public static void getNativeLanguageFormDB(Context context, Spinner spinner, ArrayAdapter adapter, RelativeLayout mainLayout){
         if(NetworkChangeReceiver.isOnline(context)){
             reference.child(context.getString(R.string.firebase_user_setting)).child(userEmail).child(context.getString(R.string.firebase_user_native_language)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -197,11 +199,14 @@ public class FirebaseDBManager {
                     Utils.user.setNativeLanguage(nativeLan);
                     spinner.setSelection(adapter.getPosition(nativeLan));
                     spinner.setVisibility(View.VISIBLE);
+                    MainActivity.stopSplashScreen(context, mainLayout);
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) { }
             });
-        }
+        } else
+            new Handler().postDelayed(()->MainActivity.stopSplashScreen(context, mainLayout), 1500);
+
     }
     /*
     usersSettings{

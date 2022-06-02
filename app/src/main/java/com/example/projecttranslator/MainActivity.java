@@ -5,17 +5,30 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.lang.annotation.Annotation;
+
 public class MainActivity extends AppCompatActivity {
 BottomNavigationView navigationView;
+RelativeLayout mainLayout;
+TextView splashText;
+View container;
 Context context;
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,17 +37,32 @@ Context context;
 
         Utils.user = new User(getApplicationContext());
         context = this;
+        mainLayout = findViewById(R.id.main_layout);
+        container = findViewById(R.id.container);
+        navigationView = findViewById(R.id.bottomNavBar);
+        splashText = findViewById(R.id.splash_screen_text);
+        //splash screen animation(stopped when native language spinner is initialized)
+        Animation fadeInAnim = AnimationUtils.loadAnimation(getApplicationContext(),
+               R.anim.fade_in);
+        splashText.setAnimation(fadeInAnim);
         Utils.putStringInSP(context, "current_fragment", "3");
         if(!Utils.user.isLoggedIn())
             startActivity(new Intent(this, LogInActivity.class));
-        else
+        else{
             getSupportFragmentManager().beginTransaction().replace(R.id.container, new ProfileFragment()).commit();     //start with profile fragment
-        navigationView = findViewById(R.id.bottomNavBar);
+        }
         navigationView.setOnNavigationItemSelectedListener(bottomNavSelection);
 
         if(getIntent() != null && getIntent().getBooleanExtra("open_translator", false))    //when returning from camera
             navigationView.findViewById(R.id.translator).callOnClick();
         Utils.putStringInSP(context, "user_email", Utils.user.getEmail());
+    }
+
+    public static void stopSplashScreen(Context context, RelativeLayout mainLayout){
+        mainLayout.findViewById(R.id.bottomNavBar).setVisibility(View.VISIBLE);
+        mainLayout.findViewById(R.id.container).setVisibility(View.VISIBLE);
+        mainLayout.findViewById(R.id.splash_screen_text).setVisibility(View.GONE);
+        mainLayout.setBackgroundColor(context.getColor(R.color.white));
     }
 
     @Override

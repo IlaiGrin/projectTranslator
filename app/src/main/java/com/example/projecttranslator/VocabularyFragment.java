@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,19 +53,17 @@ public class VocabularyFragment extends Fragment {
         title = ((Activity)context).findViewById(R.id.vocabulary_fragment_title);
 
         searchLayout.setStartIconOnClickListener(view1 -> {
-            searchEditText.setVisibility(View.VISIBLE);
-            searchLayout.setEndIconDrawable(R.drawable.ic_done);
-            searchLayout.setHint("search");
-        });
-        searchLayout.setEndIconOnClickListener(view1 -> {
-            HashMap newDatabase = Utils.user.getVocabularyByKey(vocabularyKey).orderVocabularyByString(searchEditText.getText().toString());
-            if (newDatabase.isEmpty())
-                Toast.makeText(context,"Not found",Toast.LENGTH_SHORT).show();
-            else
-                listView.setAdapter(new VocabularyWordsAdapter(context, 0,0, newDatabase, vocabularyKey, title));
-            searchEditText.setVisibility(View.GONE);
-            searchLayout.setEndIconDrawable(0);
-            searchLayout.setHint("");
+            if(searchEditText.hasFocus()){
+                HashMap newDatabase = Utils.user.getVocabularyByKey(vocabularyKey).orderVocabularyByString(searchEditText.getText().toString());
+                if (newDatabase.isEmpty())
+                    Toast.makeText(context,"Not found",Toast.LENGTH_SHORT).show();
+                else
+                    listView.setAdapter(new VocabularyWordsAdapter(context, 0,0, newDatabase, vocabularyKey, title));
+                searchEditText.clearFocus();
+                //keyboard disappear
+                InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                mgr.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+            }
         });
     }
 

@@ -4,13 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:id="@+id/main_layout"
+    android:background="@color/black">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/container"
-        android:layout_above="@id/bottomNavBar"/>
+        android:layout_above="@id/bottomNavBar"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/splash_screen_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WorDimension"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="50dp"
+        android:layout_centerInParent="true"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
@@ -18,6 +31,7 @@
         android:id="@+id/bottomNavBar"
         android:layout_alignParentBottom="true"
         android:background="?android:attr/windowBackground"
-        app:menu="@menu/menu"/>
+        app:menu="@menu/menu"
+        android:visibility="gone"/>
 
 </RelativeLayout>

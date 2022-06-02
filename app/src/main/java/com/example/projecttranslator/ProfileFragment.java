@@ -1,19 +1,24 @@
 package com.example.projecttranslator;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +44,8 @@ public class ProfileFragment extends Fragment {
     private Context context;
     private NetworkChangeReceiver networkReceiver;
     private boolean isSpinnerBuilt;
+    private SeekBar seekBar;
+    private TextView numOfCards;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -49,6 +56,8 @@ public class ProfileFragment extends Fragment {
         usernameLayout = getView().findViewById(R.id.username_edit_txt_layout);
         usernameDisplay = getView().findViewById(R.id.username_display);
         spinner = getView().findViewById(R.id.select_native_language_spinner);
+        seekBar = getView().findViewById(R.id.number_of_cards_seekbar);
+        numOfCards = getView().findViewById(R.id.number_of_cards_txt);
         FirebaseDBManager.setUserEmail(Utils.user.getEmail());
         isSpinnerBuilt = false;
         initializeNativeSpinner();
@@ -75,10 +84,59 @@ public class ProfileFragment extends Fragment {
             usernameLayout.setHint("");
         });
 
+        int cards = 0;
+        if(!Utils.getStringFromSP(context, "number_of_cards").equals("")) {
+            cards = Integer.parseInt(Utils.getStringFromSP(context, "number_of_cards"));
+            if(cards > 0)
+                seekBar.setProgress(cards);
+            else {
+                seekBar.setProgress(3);
+                cards = 3;
+            }
+        }
+        else { //first time in the activity
+            Utils.putStringInSP(context, "number_of_cards", 3 + "");
+            cards = 3;
+        }
+        numOfCards.setText("cards: " +cards);
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                Utils.putStringInSP(context, "number_of_cards", i+"");
+                numOfCards.setText("cards: "+i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
         getView().findViewById(R.id.log_out_btn).setOnClickListener(view1 -> {
             FirebaseAuth.getInstance().signOut();
             Utils.putStringInSP(context, "user_email","");
             startActivity(new Intent(getContext(), LogInActivity.class));
+        });
+
+        getView().findViewById(R.id.reset_widget_btn).setOnClickListener(view1 -> {
+            view1.setEnabled(false);
+            new Handler().postDelayed(()->view1.setEnabled(true), 5000);    //if click while updating, data isn't fully updated yet
+            Intent intent = new Intent(context, DailyWordWidget.class);
+            intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+
+            int[] ids = AppWidgetManager.getInstance(context.getApplicationContext())
+                    .getAppWidgetIds(new ComponentName(context.getApplicationContext(), DailyWordWidget.class));
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids); //put all the widgets ids
+            if (ids.length > 0)
+                context.sendBroadcast(intent);
+            else    //if there is no widget
+                Toast.makeText(context, "No widgets are displayed", Toast.LENGTH_SHORT).show();
         });
 
         getView().findViewById(R.id.native_language_info_img).setOnClickListener(view1 -> Utils.nativeLanguageDialog(getContext()));
@@ -102,7 +160,7 @@ public class ProfileFragment extends Fragment {
         spinner.setAdapter(adaptor);
         spinner.setVisibility(View.INVISIBLE);
         if(Utils.user.getNativeLanguage() == null)
-            FirebaseDBManager.getNativeLanguageFormDB(context, spinner, adaptor);   //set the position of the spinner to native language
+            FirebaseDBManager.getNativeLanguageFormDB(context, spinner, adaptor, ((MainActivity)getActivity()).findViewById(R.id.main_layout));   //set the position of the spinner to native language
         else {  //for efficiency - not reading from firebase every time
             spinner.setSelection(adaptor.getPosition(Utils.user.getNativeLanguage()));
             spinner.setVisibility(View.VISIBLE);
