@@ -52,6 +52,7 @@ public class WidgetItemFactory implements RemoteViewsService.RemoteViewsFactory 
 
     @Override
     public void onDataSetChanged() {
+        email = Utils.getStringFromSP(context, "user_email");
         if (Utils.getStringFromSP(context, "from_worker").equals("true") && !email.equals("")){
             data.clear();
             FirebaseDBManager.readRandomWords(context, Integer.parseInt(Utils.getStringFromSP(context,"number_of_cards")),email, data, widgetId);

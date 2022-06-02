@@ -25,7 +25,6 @@ public class DailyWordWidget extends AppWidgetProvider {
             views.setRemoteAdapter(R.id.daily_words_stack_view, serviceIntent);
             views.setEmptyView(R.id.daily_words_stack_view, R.id.widget_empty_view);    //when empty, display the text in empty_view
 
-            Utils.putStringInSP(context,"from_worker","true");
             appWidgetManager.updateAppWidget(appWidgetId, views);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.daily_words_stack_view);  //trigger onDataSetChanged in WidgetItemFactory
         }

@@ -133,9 +133,10 @@ public class ProfileFragment extends Fragment {
             int[] ids = AppWidgetManager.getInstance(context.getApplicationContext())
                     .getAppWidgetIds(new ComponentName(context.getApplicationContext(), DailyWordWidget.class));
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids); //put all the widgets ids
-            if (ids.length > 0)
+            if (ids.length > 0) {
+                Utils.putStringInSP(context,"from_worker","true");
                 context.sendBroadcast(intent);
-            else    //if there is no widget
+            } else    //if there is no widget
                 Toast.makeText(context, "No widgets are displayed", Toast.LENGTH_SHORT).show();
         });
 
