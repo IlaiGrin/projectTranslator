@@ -11,9 +11,10 @@
         android:layout_height="wrap_content"
         android:text="Options"
         android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="40dp"
-        android:layout_gravity="center"/>
+        android:fontFamily="@font/black_chancery"
+        android:textSize="45dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search_edit_txt_layout"
@@ -38,6 +39,6 @@
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="15dp"/>
 
 </LinearLayout>

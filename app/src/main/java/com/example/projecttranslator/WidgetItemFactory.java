@@ -38,7 +38,6 @@ public class WidgetItemFactory implements RemoteViewsService.RemoteViewsFactory 
         long howMany = (c.getTimeInMillis()-System.currentTimeMillis());
         //set worker
         PeriodicWorkRequest updateWordsWorker = new PeriodicWorkRequest.Builder(DailyWordWorker.class, 24, TimeUnit.HOURS)
-                .setInitialDelay(howMany, TimeUnit.MILLISECONDS)
                 .setConstraints(Constraints.NONE)
                 .addTag(widgetId+"")
                 .build();
@@ -75,7 +74,8 @@ public class WidgetItemFactory implements RemoteViewsService.RemoteViewsFactory 
     @Override
     public RemoteViews getViewAt(int i) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_item);
-        views.setTextViewText(R.id.widget_item_text, data.get(i));
+        if(data.size() > i)
+            views.setTextViewText(R.id.widget_item_text, data.get(i));
         return views;
     }
 
