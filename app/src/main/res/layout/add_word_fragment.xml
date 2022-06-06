@@ -33,23 +33,25 @@
             android:id="@+id/select_from_language_spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_gravity="center"
-            android:layout_weight="1" />
+            android:layout_weight="1.25" />
 
         <ImageView
             android:id="@+id/switch_languages_img"
             android:layout_width="0dp"
-            android:layout_height="55dp"
+            android:layout_height="50dp"
             android:src="@drawable/exchange_arrows"
             android:layout_gravity="center"
-            android:layout_weight="1"/>
+            android:layout_weight="0.5"/>
 
         <Spinner
             android:id="@+id/select_to_language_spinner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_gravity="center"
-            android:layout_weight="1" />
+            android:layout_weight="1.25" />
 
     </LinearLayout>
 

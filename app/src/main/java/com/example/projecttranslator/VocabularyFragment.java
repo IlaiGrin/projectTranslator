@@ -84,5 +84,7 @@ public class VocabularyFragment extends Fragment {
         vocabularyKey = vocabularyDB.getKey();
         title.setText(vocabularyDB.getDataBase().size()+" Words");
         listView.setAdapter(new VocabularyWordsAdapter(context, 0,0, vocabularyDB.getDataBase(), vocabularyDB.getKey(), title));
+        //HashMap sortedABC = Utils.user.getVocabularyByKey(vocabularyKey).orderVocabularyByACB();
+        //listView.setAdapter(new VocabularyWordsAdapter(context, 0,0, sortedABC, vocabularyKey, title));
     }
 }

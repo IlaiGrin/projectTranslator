@@ -1,11 +1,18 @@
 package com.example.projecttranslator;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class VocabularyDB {
 
@@ -29,7 +36,7 @@ public class VocabularyDB {
     public VocabularyDB(Languages languages, Context context){
         this.languages = languages;
         this.context = context;
-        dataBase = new HashMap();
+        dataBase = new LinkedHashMap();   // use LinkedHashMap to maintain sequence
     }
 
     public void addTranslation(String sourceWord, String translation){
@@ -58,7 +65,19 @@ public class VocabularyDB {
             if(word.toString().contains(wordToOrderBy))
                 orderedDB.put(word.toString(), dataBase.get(word.toString()));  //add word if contains the wanted string
         }
+
         return orderedDB;
+    }
+
+    @SuppressLint("NewApi")
+    public HashMap<String, ArrayList<String>> orderVocabularyByACB(){
+        return (HashMap<String, ArrayList<String>>) dataBase.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new)); //<Class name>::<method name>
     }
 
     public void removeWord(String word){

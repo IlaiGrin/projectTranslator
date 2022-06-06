@@ -17,13 +17,14 @@
 
     <TextView
         android:id="@+id/splash_screen_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="WorDimension"
+        android:gravity="center"
         android:fontFamily="@font/beyond_wonderland"
+        android:text="WorDimension"
         android:textColor="@color/white"
-        android:textSize="65dp" />
+        android:textSize="60dp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
