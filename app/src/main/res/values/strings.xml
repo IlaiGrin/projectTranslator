@@ -7,6 +7,8 @@
     <string name="firebase_user_words">usersWords</string>
     <string name="firebase_user_vocabulary_options">usersVocabularyOptions</string>
     <string name="firebase_user_native_language">native</string>
+    <string name="words_order">wordsOrder</string>
+    <string name="words_translations">wordsTranslations</string>
 
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>

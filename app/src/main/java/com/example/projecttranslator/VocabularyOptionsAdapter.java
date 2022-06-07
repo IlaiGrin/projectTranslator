@@ -14,16 +14,12 @@ import java.util.List;
 public class VocabularyOptionsAdapter extends ArrayAdapter {
     private Context context;
     private List<VocabularyDB> objects;
-    private ListView listView;      //get listView in order to change list when an item is clicked
-    private TextView title;
 
-    public VocabularyOptionsAdapter(Context context, int resource, int textViewResourceId, List<VocabularyDB> objects, ListView listView, TextView title){
+    public VocabularyOptionsAdapter(Context context, int resource, int textViewResourceId, List<VocabularyDB> objects){
         super(context, resource, textViewResourceId, objects);
 
         this.context = context;
         this.objects = objects;
-        this.listView = listView;
-        this.title = title;
     }
 
     @Override
@@ -41,7 +37,7 @@ public class VocabularyOptionsAdapter extends ArrayAdapter {
             if(Utils.user.getVocabularyByKey(vocabularyDB.getKey()).getDataBase().size() != 0){
                 VocabularyFragment.displayVocabularyWords(context, vocabularyDB);
             } else
-                FirebaseDBManager.readWordsFromVocabulary(context, vocabularyDB, listView, title);
+                FirebaseDBManager.readWordsFromVocabulary(context, vocabularyDB);
         });
         return view;
     }

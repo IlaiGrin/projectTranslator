@@ -2,11 +2,15 @@ package com.example.projecttranslator;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,6 +24,7 @@ public class VocabularyDB {
     private Context context;
     private Languages languages;
     private HashMap<String, ArrayList<String>> dataBase;
+    private HashMap<String, Long> wordsOrder;     //save order by saving time
     private String key;         //used to save the route in Realtime DB
 
     //Getters
@@ -28,15 +33,18 @@ public class VocabularyDB {
     public String getFromLanguage(){ return languages.getFromLanguage();}
     public String getKey() { return key; }
     public HashMap<String, ArrayList<String>> getDataBase() { return dataBase; }
+    public HashMap<String, Long> getDataBaseOrder() { return wordsOrder; }
 
     //Setters
     public void setKey(String key) { this.key = key; }
     public void setDataBase(HashMap<String, ArrayList<String>> dataBase) { this.dataBase = dataBase; }
+    public void setDataBaseOrder(HashMap<String,Long> wordsOrder) { this.wordsOrder = wordsOrder; }
 
     public VocabularyDB(Languages languages, Context context){
         this.languages = languages;
         this.context = context;
-        dataBase = new LinkedHashMap();   // use LinkedHashMap to maintain sequence
+        dataBase = new HashMap();
+        wordsOrder = new HashMap();
     }
 
     public void addTranslation(String sourceWord, String translation){
@@ -46,9 +54,10 @@ public class VocabularyDB {
         if(sourceWord.equals(translation))
             Toast.makeText(context,"Invalid",Toast.LENGTH_SHORT).show();
         else if(dataBase.get(sourceWord) == null) {      //if word doesn't exist in DB
-            ArrayList<String> translations = new ArrayList<String>();
+            ArrayList<String> translations = new ArrayList<>();
             translations.add(translation);
             dataBase.put(sourceWord, translations);
+            wordsOrder.put(sourceWord, (long) wordsOrder.size()+1);
             FirebaseDBManager.updateDataBase(context,this);
             Toast.makeText(context,"Saved",Toast.LENGTH_SHORT).show();
         } else if(!dataBase.get(sourceWord).contains(translation)) {     //if translation doesn't exist in DB
@@ -71,16 +80,42 @@ public class VocabularyDB {
 
     @SuppressLint("NewApi")
     public HashMap<String, ArrayList<String>> orderVocabularyByACB(){
-        return (HashMap<String, ArrayList<String>>) dataBase.entrySet()
+        HashMap orderABC = new LinkedHashMap();  //to maintain order of insertion when returning
+         dataBase.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByKey())
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (oldValue, newValue) -> oldValue, LinkedHashMap::new)); //<Class name>::<method name>
+                .forEachOrdered(x -> orderABC.put(x.getKey(), x.getValue()));
+         return orderABC;
     }
 
-    public void removeWord(String word){
-        dataBase.remove(word);
+    @SuppressLint("NewApi")
+    public LinkedHashMap<String, ArrayList<String>> orderVocabularyByInsertionTime(boolean fromNewToOld){
+        HashMap orderIndexes = new LinkedHashMap();
+        if(fromNewToOld){
+            wordsOrder.entrySet().stream()
+                    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                    .forEachOrdered(x -> orderIndexes.put(x.getKey(), x.getValue()));
+        } else {
+            wordsOrder.entrySet().stream()
+                    .sorted(Map.Entry.comparingByValue())
+                    .forEachOrdered(x -> orderIndexes.put(x.getKey(), x.getValue()));
+        }
+        LinkedHashMap<String, ArrayList<String>> orderedWords = new LinkedHashMap();    //to maintain order of insertion when returning
+        for (Object word:orderIndexes.keySet())
+            orderedWords.put(word.toString(), dataBase.get(word.toString()));
+        return orderedWords;
+    }
+
+    @SuppressLint("NewApi")
+    public void removeWord(String wordToDelete){
+        dataBase.remove(wordToDelete);
+        for (String word:wordsOrder.keySet()) {     //reordering the indexes
+            long wordIndex = wordsOrder.get(word);
+            long deleteIndex = wordsOrder.get(wordToDelete);
+            if(wordIndex > deleteIndex)
+                wordsOrder.replace(word, wordIndex, wordIndex-1);
+        }
+        wordsOrder.remove(wordToDelete);
+        FirebaseDBManager.updateDataBase(context, this);        //update changes in firebase
     }
 }

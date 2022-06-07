@@ -70,14 +70,14 @@ public class VocabularyWordsAdapter extends ArrayAdapter {
                 .setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss())
                 .setPositiveButton("Yes, delete", (dialogInterface, i)->{
                     title.setText(Integer.parseInt(title.getText().toString().split(" ", 2)[0]) - 1 +" Words");    //get the number from the previous title, -1, and update
-                    //remove from firebase
-                    FirebaseDBManager.deleteWord(context, vocabularyKey, sourceWords.get(position));
                     //remove from user's dictionary
                     Utils.user.removeWord(vocabularyKey, sourceWords.get(position));
                     //remove from listView
                     dataBase.remove(sourceWords.get(position));
                     sourceWords.remove(position);
                     notifyDataSetChanged();
+                    if(Utils.user.getVocabularyByKey(vocabularyKey) == null)    //if the vocabulary is empty
+                        VocabularyFragment.displayVocabularyOptions(context, Utils.user.getDictionary());
                     dialogInterface.dismiss();
                 });
 

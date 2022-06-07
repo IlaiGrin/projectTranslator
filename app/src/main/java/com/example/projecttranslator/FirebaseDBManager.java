@@ -36,10 +36,12 @@ public class FirebaseDBManager {
             userEmail = email.replace(".","");
     }
 
-    public static void deleteWord(Context context, String vocabularyKey, String word){
-        if(NetworkChangeReceiver.isOnline(context))
-            reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabularyKey).child(word).removeValue();
-    }
+    /*public static void deleteWord(Context context, String vocabularyKey, String word){
+        if(NetworkChangeReceiver.isOnline(context)) {
+            reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabularyKey).child(context.getString(R.string.words_translations)).child(word).removeValue();
+            reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabularyKey).child(context.getString(R.string.words_order)).child(word).removeValue();
+        }
+    }*/
 
     public static void deleteVocabularyOption(Context context, String vocabularyKey){
         if(NetworkChangeReceiver.isOnline(context))
@@ -63,7 +65,8 @@ public class FirebaseDBManager {
 
     //updates words in DB
     public static void updateDataBase(Context context, VocabularyDB vocabulary){    //save btns are disable so user can't call this without internet
-        reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabulary.getKey()).setValue(vocabulary.getDataBase());
+        reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabulary.getKey()).child(context.getString(R.string.words_translations)).setValue(vocabulary.getDataBase());
+        reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabulary.getKey()).child(context.getString(R.string.words_order)).setValue(vocabulary.getDataBaseOrder());
     }
 
     public static void addVocabularyDB(Context context, VocabularyDB vocabulary){
@@ -106,7 +109,8 @@ public class FirebaseDBManager {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
-                        Utils.user.getVocabularyByKey(childDataSnapshot.getKey()).setDataBase((HashMap<String, ArrayList<String>>) childDataSnapshot.getValue());
+                        Utils.user.getVocabularyByKey(childDataSnapshot.getKey()).setDataBase((HashMap<String, ArrayList<String>>) childDataSnapshot.child(context.getString(R.string.words_translations)).getValue());
+                        Utils.user.getVocabularyByKey(childDataSnapshot.getKey()).setDataBaseOrder((HashMap<String, Long>) childDataSnapshot.child(context.getString(R.string.words_order)).getValue());
                     }
                     Utils.setProgressBar(layout, progressBar, false);
                 }
@@ -136,12 +140,13 @@ public class FirebaseDBManager {
         }
     }
 
-    public static void readWordsFromVocabulary(Context context, VocabularyDB vocabularyDB, ListView listView, TextView title){
+    public static void readWordsFromVocabulary(Context context, VocabularyDB vocabularyDB){
         if(NetworkChangeReceiver.isOnline(context)){
             reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabularyDB.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    vocabularyDB.setDataBase((HashMap<String, ArrayList<String>>) snapshot.getValue());
+                    vocabularyDB.setDataBase((HashMap<String, ArrayList<String>>) snapshot.child(context.getString(R.string.words_translations)).getValue());
+                    vocabularyDB.setDataBaseOrder((HashMap<String, Long>) snapshot.child(context.getString(R.string.words_order)).getValue());
                     VocabularyFragment.displayVocabularyWords(context, vocabularyDB);
                 }
 
@@ -167,7 +172,7 @@ public class FirebaseDBManager {
                     while (words.size() < wordsArraySize[0]) {
                         totalWordsCounter[0] = 0;
                         for (DataSnapshot childDataSnapshot : snapshot.getChildren()) {
-                            HashMap<String, ArrayList<String>> database = (HashMap<String, ArrayList<String>>)childDataSnapshot.getValue();
+                            HashMap<String, ArrayList<String>> database = (HashMap<String, ArrayList<String>>)childDataSnapshot.child(context.getString(R.string.words_translations)).getValue();
                             totalWordsCounter[0] = totalWordsCounter[0] + database.size();
                             if(rnd.nextBoolean() && words.size() < numOfWords) {    //random vocabulary
                                 //get a random key = word
