@@ -36,13 +36,6 @@ public class FirebaseDBManager {
             userEmail = email.replace(".","");
     }
 
-    /*public static void deleteWord(Context context, String vocabularyKey, String word){
-        if(NetworkChangeReceiver.isOnline(context)) {
-            reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabularyKey).child(context.getString(R.string.words_translations)).child(word).removeValue();
-            reference.child(context.getString(R.string.firebase_user_words)).child(userEmail).child(vocabularyKey).child(context.getString(R.string.words_order)).child(word).removeValue();
-        }
-    }*/
-
     public static void deleteVocabularyOption(Context context, String vocabularyKey){
         if(NetworkChangeReceiver.isOnline(context))
             reference.child(context.getString(R.string.firebase_user_vocabulary_options)).child(userEmail).child(vocabularyKey).removeValue();

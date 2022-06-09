@@ -7,6 +7,8 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -20,7 +22,7 @@ public class WidgetItemFactory implements RemoteViewsService.RemoteViewsFactory 
     private ArrayList<String> data;
     private String email;
 
-    public  WidgetItemFactory(Context context, Intent intent){
+    public WidgetItemFactory(Context context, Intent intent){
         this.context = context;
         data = new ArrayList<>();
         //get widget id from intent
@@ -39,9 +41,11 @@ public class WidgetItemFactory implements RemoteViewsService.RemoteViewsFactory 
         //set worker
         PeriodicWorkRequest updateWordsWorker = new PeriodicWorkRequest.Builder(DailyWordWorker.class, 24, TimeUnit.HOURS)
                 .setConstraints(Constraints.NONE)
+                .setConstraints(new Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED).build())
                 .addTag(widgetId+"")
                 .build();
-        WorkManager.getInstance(context).enqueue(updateWordsWorker);
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork("update widget", ExistingPeriodicWorkPolicy.REPLACE, updateWordsWorker);
     }
 
     @Override
