@@ -2,6 +2,8 @@ package com.example.projecttranslator;
 
 import com.google.mlkit.nl.translate.TranslateLanguage;
 
+import java.util.Locale;
+
 
 public class Languages {
 
@@ -26,6 +28,7 @@ public class Languages {
     public String getToLanguage() { return toLanguage; }
     public String getFromLanguageCode(){ return getLanguageCode(fromLanguage); }
     public String getToLanguageCode(){ return getLanguageCode(toLanguage); }
+    public Locale getFromLocaleLanguage(){ return getLocalLanguage(fromLanguage); }
 
     //Setter
     public void setFromLanguage(String fromLanguage) { this.fromLanguage = fromLanguage; }
@@ -41,5 +44,13 @@ public class Languages {
                 return TranslateLanguage.ARABIC;
         }
         return "";
+    }
+
+    public Locale getLocalLanguage(String language) {
+        switch (language){
+            case "English":
+                return Locale.ENGLISH;
+        }
+        return null;
     }
 }

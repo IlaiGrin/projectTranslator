@@ -111,8 +111,6 @@ Context context;
         manager.beginTransaction()
                 .setCustomAnimations(in_anim, out_anim)
                 .replace(R.id.container, fragment)
-                .addToBackStack(null)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
         return true;
     };

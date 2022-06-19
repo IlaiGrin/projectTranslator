@@ -6,11 +6,9 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -151,7 +149,7 @@ public class FirebaseDBManager {
         }
     }
 
-    public static void readRandomWords(Context context, int numOfWords, String email, ArrayList<String> words, int appWidgetId){
+    public static void readRandomWords(Context context, int numOfWords, String email, ArrayList<String> words, ArrayList<String> translations, int appWidgetId){
         if(NetworkChangeReceiver.isOnline(context)){
             Random rnd = new Random();
             reference = FirebaseDatabase.getInstance().getReference();
@@ -170,8 +168,10 @@ public class FirebaseDBManager {
                             if(rnd.nextBoolean() && words.size() < numOfWords) {    //random vocabulary
                                 //get a random key = word
                                 String randomWord = database.keySet().toArray()[rnd.nextInt(database.size())].toString();
-                                if(!words.contains(randomWord))
+                                if(!words.contains(randomWord)) {
                                     words.add(randomWord);
+                                    translations.add(database.get(randomWord).toString());
+                                }
                             }
                         }
                         if(totalWordsCounter[0] < wordsArraySize[0])    //to little words

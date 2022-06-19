@@ -44,7 +44,15 @@ public class WordTranslator {
         translator.downloadModelIfNeeded(conditions).addOnSuccessListener(aVoid ->{
             Toast.makeText(context, "Language modal is downloaded", Toast.LENGTH_SHORT).show();
             // calling method to translate text
-            translator.translate(input).addOnSuccessListener(translation-> display.setText(translation));
+            translator.translate(input).addOnSuccessListener(translation-> {
+                String noVowelsTranslation = "";
+                for(int j=0; j<translation.length() ; j++) {
+                    char c = translation.charAt(j);
+                    if(c<1425 || c>1479)
+                        noVowelsTranslation = noVowelsTranslation + translation.charAt(j);
+                }
+                display.setText(noVowelsTranslation);
+            });
         }).addOnFailureListener(exception -> Toast.makeText(context, "Fail to download modal", Toast.LENGTH_SHORT).show())
         .addOnCompleteListener(complete ->Utils.setProgressBar(layout, downloadModelBar, false));
     }

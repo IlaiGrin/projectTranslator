@@ -3,6 +3,7 @@ package com.example.projecttranslator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class VocabularyWordsAdapter extends ArrayAdapter {
 
@@ -22,11 +24,26 @@ public class VocabularyWordsAdapter extends ArrayAdapter {
     private ArrayList<String> sourceWords;
     private String vocabularyKey;
     private TextView title;
+    private TextToSpeech mTTS;
+    private boolean isSpeechAvailable;
 
     public VocabularyWordsAdapter(Context context, int resource, int textViewResourceId, HashMap<String, ArrayList<String>> dataBase, String vocabularyKey, TextView title) {
         super(context, resource, textViewResourceId, dataBase.keySet().toArray());      //enter source words as an array
 
         Object[] words = dataBase.keySet().toArray();
+        mTTS = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status == TextToSpeech.SUCCESS){
+                    int result = mTTS.setLanguage(Utils.user.getVocabularyByKey(vocabularyKey).getLanguages().getFromLocaleLanguage());
+                    if(!(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED)){
+                        mTTS.setPitch(1.4F);
+                        mTTS.setSpeechRate(0.9F);
+                        isSpeechAvailable = true;
+                    }
+                }
+            }
+        });
         //converting to list
         this.sourceWords = new ArrayList<>();
         for (Object word:words)
@@ -47,6 +64,10 @@ public class VocabularyWordsAdapter extends ArrayAdapter {
             TextView numOfTranslations = view.findViewById(R.id.number_of_translations);
 
             sourceWord.setText(sourceWords.get(position));
+            sourceWord.setOnClickListener(view1 -> {
+                if(isSpeechAvailable)
+                    mTTS.speak(sourceWords.get(position), TextToSpeech.QUEUE_FLUSH, null);
+            });
             numOfTranslations.setText(dataBase.get(sourceWords.get(position)).size() + "");
             initializeTranslationsSpinner(view.findViewById(R.id.translations_spinner), dataBase.get(sourceWords.get(position)));
 
@@ -99,4 +120,5 @@ public class VocabularyWordsAdapter extends ArrayAdapter {
         adaptor.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinner.setAdapter(adaptor);
     }
+
 }
