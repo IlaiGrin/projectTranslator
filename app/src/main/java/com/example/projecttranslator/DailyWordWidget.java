@@ -6,8 +6,11 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 
@@ -18,6 +21,7 @@ public class DailyWordWidget extends AppWidgetProvider {
 public static final String ACTION_CHANGE_TEXT = "com.example.projecttranslator.actioncChangeText";
 public static final String EXTRA_ITEM_POSITION = "itemPosition";
 public static final String EXTRA_TRANSLATIONS = "extraTranslations";
+public static final String EXTRA_WORDS = "extraWords";
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
@@ -29,7 +33,7 @@ public static final String EXTRA_TRANSLATIONS = "extraTranslations";
 
             Intent clickIntent = new Intent(context, DailyWordWidget.class);
             clickIntent.setAction(ACTION_CHANGE_TEXT);
-            PendingIntent clickPendingIntent = PendingIntent.getBroadcast(context,0,clickIntent,0);
+            PendingIntent clickPendingIntent = PendingIntent.getBroadcast(context,0,clickIntent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.daily_word_widget);
             views.setRemoteAdapter(R.id.daily_words_stack_view, serviceIntent);
@@ -41,12 +45,15 @@ public static final String EXTRA_TRANSLATIONS = "extraTranslations";
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onReceive(Context context, Intent intent) {
         if(intent.getAction().equals(ACTION_CHANGE_TEXT)){
+            ArrayList<String> words = intent.getStringArrayListExtra(EXTRA_WORDS);
             ArrayList<String> translations = intent.getStringArrayListExtra(EXTRA_TRANSLATIONS);        //return all the translations of all of the cards
             int clickedPosition = intent.getIntExtra(EXTRA_ITEM_POSITION, 0);
-            Toast.makeText(context, translations.get(clickedPosition), Toast.LENGTH_SHORT).show();
+            if(translations != null)
+                Toast.makeText(context, translations.get(clickedPosition), Toast.LENGTH_SHORT).show();
         }
         super.onReceive(context, intent);
     }

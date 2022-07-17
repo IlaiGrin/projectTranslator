@@ -85,6 +85,7 @@ public class WidgetItemFactory implements RemoteViewsService.RemoteViewsFactory 
         //set on click on each card
         Intent fillIntent = new Intent();
         fillIntent.putStringArrayListExtra(DailyWordWidget.EXTRA_TRANSLATIONS, dataTranslations);
+        fillIntent.putStringArrayListExtra(DailyWordWidget.EXTRA_WORDS, data);
         fillIntent.putExtra(DailyWordWidget.EXTRA_ITEM_POSITION, i);
         views.setOnClickFillInIntent(R.id.widget_item_text, fillIntent);
 

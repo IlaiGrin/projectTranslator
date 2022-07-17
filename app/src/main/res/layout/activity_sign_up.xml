@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/round_background"
+    android:theme="@style/Theme.MaterialComponents.Light"
     android:backgroundTint="@null">
 
     <TextView

@@ -1,5 +1,6 @@
 package com.example.projecttranslator;
 
+import com.google.firebase.ml.naturallanguage.languageid.FirebaseLanguageIdentification;
 import com.google.mlkit.nl.translate.TranslateLanguage;
 
 import java.util.Locale;
@@ -11,7 +12,6 @@ public class Languages {
     private static String[] Languages = new String[]{"English", "Hebrew", "Arabic"};
     private static String[] toLanguages = new String[]{"To", "English", "Hebrew", "Arabic"};
     private static String[] fromLanguages = new String[]{"From", "English", "Hebrew", "Arabic"};
-    //private FirebaseLanguageIdentification identifier;
 
     public Languages(String fromLanguage, String toLanguage){
         this.fromLanguage = fromLanguage;
@@ -46,9 +46,9 @@ public class Languages {
         return "";
     }
 
-    public Locale getLocalLanguage(String language) {
-        switch (language){
-            case "English":
+    public static Locale getLocalLanguage(String languageCode) {
+        switch (languageCode){
+            case TranslateLanguage.ENGLISH:
                 return Locale.ENGLISH;
         }
         return null;

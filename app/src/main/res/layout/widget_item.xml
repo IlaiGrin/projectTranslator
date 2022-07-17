@@ -7,4 +7,5 @@
     android:textSize="25dp"
     android:background="@drawable/app_widget_background"
     android:text="item"
+    android:theme="@style/Theme.MaterialComponents.Light"
     android:textColor="@color/black"/>

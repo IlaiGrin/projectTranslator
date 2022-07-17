@@ -143,7 +143,6 @@ public class FirebaseDBManager {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
                 }
             });
         }
@@ -183,6 +182,7 @@ public class FirebaseDBManager {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
+                    readRandomWords(context, numOfWords, email, words, translations, appWidgetId);  //retry
                 }
             });
         }

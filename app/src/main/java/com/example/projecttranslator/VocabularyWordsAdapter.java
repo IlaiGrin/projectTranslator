@@ -3,6 +3,7 @@ package com.example.projecttranslator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Build;
 import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,26 +27,16 @@ public class VocabularyWordsAdapter extends ArrayAdapter {
     private ArrayList<String> sourceWords;
     private String vocabularyKey;
     private TextView title;
-    private TextToSpeech mTTS;
-    private boolean isSpeechAvailable;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public VocabularyWordsAdapter(Context context, int resource, int textViewResourceId, HashMap<String, ArrayList<String>> dataBase, String vocabularyKey, TextView title) {
         super(context, resource, textViewResourceId, dataBase.keySet().toArray());      //enter source words as an array
 
         Object[] words = dataBase.keySet().toArray();
-        mTTS = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if(status == TextToSpeech.SUCCESS){
-                    int result = mTTS.setLanguage(Utils.user.getVocabularyByKey(vocabularyKey).getLanguages().getFromLocaleLanguage());
-                    if(!(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED)){
-                        mTTS.setPitch(1.4F);
-                        mTTS.setSpeechRate(0.9F);
-                        isSpeechAvailable = true;
-                    }
-                }
-            }
-        });
+
+        //initialize speaker
+        Utils.speak(context, "");
+
         //converting to list
         this.sourceWords = new ArrayList<>();
         for (Object word:words)
@@ -54,6 +47,7 @@ public class VocabularyWordsAdapter extends ArrayAdapter {
         this.title = title;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater layoutInflater = ((Activity) context).getLayoutInflater();
@@ -64,10 +58,7 @@ public class VocabularyWordsAdapter extends ArrayAdapter {
             TextView numOfTranslations = view.findViewById(R.id.number_of_translations);
 
             sourceWord.setText(sourceWords.get(position));
-            sourceWord.setOnClickListener(view1 -> {
-                if(isSpeechAvailable)
-                    mTTS.speak(sourceWords.get(position), TextToSpeech.QUEUE_FLUSH, null);
-            });
+            sourceWord.setOnClickListener(view1 -> Utils.speak(context, sourceWords.get(position)));
             numOfTranslations.setText(dataBase.get(sourceWords.get(position)).size() + "");
             initializeTranslationsSpinner(view.findViewById(R.id.translations_spinner), dataBase.get(sourceWords.get(position)));
 
